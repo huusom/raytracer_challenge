@@ -1,0 +1,13 @@
+{
+    "$schema": "https://schemas.reqnroll.net/reqnroll-config-latest.json",
+    "bindingAssemblies": [
+    ],
+    "runtime": {
+        "stopAtFirstError": true,
+        "missingOrPendingStepsOutcome": "Inconclusive"
+    },
+    "trace": {
+        "stepDefinitionSkeletonStyle": "RegexAttribute",
+        "coloredOutput": true
+    }
+}

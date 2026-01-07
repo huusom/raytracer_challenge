@@ -1,0 +1,26 @@
+**/bin/*
+**/obj/*
+*.feature.cs
+
+# IDE/Editor
+.vscode/
+.devcontainer/
+.vs/
+*.suo
+*.user
+*.userosscache
+
+# Build artifacts
+*.dll
+*.exe
+*.pdb
+*.cache
+*.tmp
+
+# NuGet packages
+packages/
+*.nupkg
+
+# Configuration
+.config/
+.fake

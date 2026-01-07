@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Library.fs" />
+    <Compile Include="Math/Tuple.fs" />
+    <Compile Include="Math/Matrix.fs" />
+    <Compile Include="Graphics/Color.fs" />
+    <Compile Include="Graphics/Light.fs" />
+    <Compile Include="Graphics/Material.fs" />
+    <Compile Include="Graphics/Canvas.fs" />
+    <Compile Include="Geometry/Transformation.fs" />
+    <Compile Include="Geometry/Ray.fs" />
+    <Compile Include="Geometry/Shape.fs" />
+    <Compile Include="Geometry/Intersection.fs" />
+  </ItemGroup>
+</Project>
