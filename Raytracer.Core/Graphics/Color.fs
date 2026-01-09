@@ -12,6 +12,13 @@ type T =
         member this.Equals(other: T) : bool =
             eq this.r other.r && eq this.g other.g && eq this.b other.b
 
+    override this.Equals obj =
+        match obj with
+        | :? T as other -> (this :> System.IEquatable<T>).Equals other
+        | _ -> false
+
+    override this.GetHashCode() = hash (this.r, this.g, this.b)
+
     static member (+)(l, r) =
         { r = l.r + r.r
           g = l.g + r.g
@@ -32,10 +39,11 @@ type T =
           g = l.g * r
           b = l.b * r }
 
-let color r g b = { r = r; g = g; b = b }
-let black = color 0 0 0
-let white = color 1 1 1
-let equals (l: T) (r: T) = (l :> System.IEquatable<T>).Equals(r)
+let create r g b = { r = r; g = g; b = b }
+
+let black = { r = 0.0; g = 0.0; b = 0.0 }
+
+let white = { r = 1.0; g = 1.0; b = 1.0 }
 
 let toInt (t: T) =
     let clamp x = x * 256.0 |> int |> min 255 |> max 0

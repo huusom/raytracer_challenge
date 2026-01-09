@@ -39,7 +39,7 @@ public class CanvasSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void EveryPixelShouldBe(string k, Graphics.Color.T expected)
     {
         var c = Canvas[k];
-        c.p.ShouldAllBe(a => Graphics.Color.equals(a, expected));
+        c.p.ShouldAllBe(a => a.Equals(expected));
     }
 
     [When(@"^write_pixel\((c), (\d+), (\d+), (.*)\)$")]

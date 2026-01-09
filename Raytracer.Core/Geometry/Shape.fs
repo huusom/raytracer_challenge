@@ -5,14 +5,26 @@ open Raytracer.Math.Matrix
 open Raytracer.Graphics
 
 module Sphere =
+    [<CustomEquality; NoComparison>]
     type T =
-        { id: int
-          mutable transform: M4.T
+        { mutable transform: M4.T
           mutable material: Material.T }
 
-    let create id transform material =
-        { id = id
-          transform = transform
+        interface System.IEquatable<T> with
+            member this.Equals(other: T) : bool =
+                let a = this.material.Equals other.material
+                let b = this.transform.Equals other.transform
+                a && b
+
+        override this.Equals(obj) =
+            match obj with
+            | :? T as other -> (this :> System.IEquatable<T>).Equals other
+            | _ -> false
+
+        override this.GetHashCode() : int = hash (this.transform, this.material)
+
+    let create transform material =
+        { transform = transform
           material = material }
 
     let intersect (ray: Ray.T) =
@@ -31,10 +43,26 @@ module Sphere =
                 (-b + sqrt discrimant) / (2. * a)
             }
 
-type T = Sphere of Sphere.T
+[<CustomEquality; NoComparison>]
+type T =
+    | Sphere of Sphere.T
 
-let sphere id transform material =
-    Sphere.create id transform material |> Sphere
+    interface System.IEquatable<T> with
+        member this.Equals(other: T) : bool =
+            match this, other with
+            | Sphere a, Sphere b -> a.Equals(b)
+
+    override this.Equals obj =
+        match obj with
+        | :? T as other -> (this :> System.IEquatable<T>).Equals other
+        | _ -> false
+
+    override this.GetHashCode() : int =
+        match this with
+        | Sphere s -> hash s
+
+let sphere transform material =
+    Sphere.create transform material |> Sphere
 
 let getTransform shape =
     match shape with
@@ -43,6 +71,10 @@ let getTransform shape =
 let setTransfrom shape m =
     match shape with
     | Sphere s -> s.transform <- m
+
+let getMaterial shape =
+    match shape with
+    | Sphere s -> s.material
 
 let normalAt shape point =
     let transform = getTransform shape

@@ -2,13 +2,31 @@ module Raytracer.Graphics.Material
 
 open Raytracer.Graphics
 open Raytracer.Math
+open Raytracer
 
+[<CustomEquality; NoComparison>]
 type T =
     { mutable color: Color.T
       mutable ambient: float
       mutable diffuse: float
       mutable specular: float
       mutable shininess: float }
+
+    interface System.IEquatable<T> with
+        member this.Equals(other: T) : bool =
+            eq this.ambient other.ambient
+            && eq this.diffuse other.diffuse
+            && eq this.specular other.specular
+            && eq this.shininess other.shininess
+            && this.color.Equals other.color
+
+    override this.Equals(obj) =
+        match obj with
+        | :? T as other -> (this :> System.IEquatable<T>).Equals other
+        | _ -> false
+
+    override this.GetHashCode() : int =
+        hash (this.color, this.ambient, this.diffuse, this.specular, this.shininess)
 
 let create color ambient diffuse specular shininess =
     { color = color
@@ -34,7 +52,7 @@ let lightning material (light: Light.T) point eyev normalv =
             if reflect_dot_eye <= 0. then
                 diffuse, Color.black
             else
-                let factor = reflect_dot_eye ** material.shininess 
+                let factor = reflect_dot_eye ** material.shininess
                 let specular = light.intensity * material.specular * factor
                 diffuse, specular
 

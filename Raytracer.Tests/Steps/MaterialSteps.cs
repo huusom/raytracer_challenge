@@ -9,7 +9,7 @@ namespace Raytracer.Tests.Steps;
 public class MaterialSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
     [StepArgumentTransformation(@"material\(\)")]
-    public static Material ToMaterial() => Graphics.Material.create(Graphics.Color.white, 0.1, 0.9, 0.9, 200.0);
+    public static Material Create() => DefaultsBuilder.Material();
 
     [Given(@"^(m) ← (material\(\))$")]
     public void GivenMaterial(string key, Material m)

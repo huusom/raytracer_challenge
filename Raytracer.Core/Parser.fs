@@ -1,0 +1,31 @@
+module Raytracer.Parser
+
+let (|Rx|_|) pattern input =
+    match System.Text.RegularExpressions.Regex.Match(input, pattern) with
+    | m when m.Success -> [ for x in m.Groups -> x.Value ] |> List.tail |> Some
+    | _ -> None
+
+let (|Float|_|) input =
+    match System.Double.TryParse(input: string) with
+    | (true, f) -> Some f
+    | _ -> None
+
+let parseFloat txt =
+    match txt with
+    | Rx @"^π / (\d)$" [ Float v ] -> v
+    | Rx @"^√(\d)/(\d)$" [ Float d; Float n ] -> (sqrt d) / n
+    | Rx @"^-√(\d)/(\d)$" [ Float d; Float n ] -> -(sqrt d) / n
+    | Rx @"^√(\d+)$" [ Float f ] -> sqrt f
+    | _ -> failwithf "'%s' does not match any pattern." txt
+
+let parseUpdate shape txt =
+    match txt with
+    | Rx @"^material.specular (.*)$" [ Float s ] -> (Geometry.Shape.getMaterial shape).specular <- s
+    | Rx @"^material.diffuse (.*)$" [ Float s ] -> (Geometry.Shape.getMaterial shape).diffuse <- s
+    | Rx @"^material.color \((.*), (.*), (.*)\)$" [ Float r; Float g; Float b ] ->
+        (Geometry.Shape.getMaterial shape).color <- Graphics.Color.create r g b
+    | Rx @"^transform scaling\((.*), (.*), (.*)\)$" [ Float x; Float y; Float z ] ->
+        Geometry.Shape.setTransfrom shape (Geometry.Transformation.scaling x y z)
+    | _ -> failwithf "'%s' does not match any pattern." txt
+
+    shape

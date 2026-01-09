@@ -12,8 +12,10 @@
     <Compile Include="Graphics/Material.fs" />
     <Compile Include="Graphics/Canvas.fs" />
     <Compile Include="Geometry/Transformation.fs" />
-    <Compile Include="Geometry/Ray.fs" />
-    <Compile Include="Geometry/Shape.fs" />
+    
+    <Compile Include="Geometry/Ray.fs" /><Compile Include="Geometry/Shape.fs" />
     <Compile Include="Geometry/Intersection.fs" />
+    <Compile Include="Scene/World.fs" />   
+    <Compile Include="Parser.fs" />
   </ItemGroup>
 </Project>

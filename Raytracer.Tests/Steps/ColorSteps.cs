@@ -9,7 +9,7 @@ public class ColorSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
  
     [StepArgumentTransformation(@"color\((.*), (.*), (.*)\)")]
-    public static Color ToColor(double r, double g, double b) => Graphics.Color.color(r, g, b);
+    public static Color Create(double r, double g, double b) => Graphics.Color.create(r, g, b);
 
     [Given(@"^(c|c1|c2|c3|red) ← (color.*)$")]
     [Given(@"^(intensity) ← (color.*)$")]

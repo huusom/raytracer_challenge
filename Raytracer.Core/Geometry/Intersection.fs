@@ -7,6 +7,8 @@ type T = { t: float; object: Shape.T }
 
 let create object t = { t = t; object = object }
 
+let sort xs = xs |> Seq.sortBy (fun i -> i.t)
+
 let intersect shape ray =
     let r = shape |> getTransform |> inverse |> Ray.transform ray
 
@@ -16,7 +18,4 @@ let intersect shape ray =
     |> Array.ofSeq
 
 let hit xs =
-    xs
-    |> Seq.sortBy (fun i -> i.t)
-    |> Seq.skipWhile (fun i -> i.t < 0.)
-    |> Seq.tryHead
+    xs |> sort |> Seq.skipWhile (fun i -> i.t < 0.) |> Seq.tryHead

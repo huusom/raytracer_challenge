@@ -88,7 +88,8 @@ module M3 =
         m.m11 * (cofactor m 0 0) + m.m12 * (cofactor m 0 1) + m.m13 * (cofactor m 0 2)
 
 module M4 =
-    open Raytracer.Library 
+    open Raytracer.Library
+
     [<CustomEquality; NoComparison>]
     type T =
         { m11: float
@@ -126,6 +127,30 @@ module M4 =
                 && eq this.m42 other.m42
                 && eq this.m43 other.m43
                 && eq this.m44 other.m44
+
+        override this.Equals(obj) =
+            match obj with
+            | :? T as other -> (this :> System.IEquatable<T>).Equals other
+            | _ -> false
+
+        override this.GetHashCode() : int =
+            hash
+                [| this.m11
+                   this.m12
+                   this.m13
+                   this.m14
+                   this.m21
+                   this.m22
+                   this.m23
+                   this.m24
+                   this.m31
+                   this.m32
+                   this.m33
+                   this.m34
+                   this.m41
+                   this.m42
+                   this.m43
+                   this.m44 |]
 
         member this.Item
             with get (r, c) =
@@ -308,4 +333,3 @@ let cofactor m r c =
     | M3 m' -> M3.cofactor m' r c
     | M4 m' -> M4.cofactor m' r c
     | _ -> failwith "cannot get cofactor from M2"
-

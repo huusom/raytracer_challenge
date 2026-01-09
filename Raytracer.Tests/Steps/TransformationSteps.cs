@@ -27,7 +27,7 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     public static Matrix ToRotationZ(double radians) => Geometry.Transformation.rotation_z(System.Math.PI / radians);
 
     [StepArgumentTransformation(@"(π / \d|\-?√\d/\d|√\d+)")]
-    public static double ToDouble(string arg) => Library.parseFloat(arg);
+    public static double ToDouble(string arg) => Parser.parseFloat(arg);
 
     [Given(@"^(transform|C|m|t) ← (translation.*)$")]
     [Given(@"^(transform|B|m) ← (scaling\([^)]*\))$")]

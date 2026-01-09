@@ -1,13 +1,12 @@
 using Reqnroll;
 using Shouldly;
+using System.Linq; 
 
 namespace Raytracer.Tests.Steps;
 
 [Binding]
 public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
-
-
     [When(@"^(i) ← intersection\((.*), (s)\)$")]
     [Given(@"^(i1|i2|i3|i4) ← intersection\((.*), (s)\)$")]
     public void GivenIntersection(string key, double t, string shapeKey)
@@ -75,4 +74,55 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         ctx.ShouldNotContainKey(key);
     }
+
+    [When(@"^(xs) ← intersect\((s), (r)\)$")]
+    public void WhenCalculatingIntersection(string intersectKey, string shapeKey, string rayKey)
+    {
+        var s = Shape[shapeKey];
+        var r = Ray[rayKey];
+        var xs = Geometry.Intersection.intersect(s, r);
+
+        XS[intersectKey] = xs;
+    }
+
+    [Then(@"^(xs).count = (\d)$")]
+    public void ThenIntersectionCountShouldBe(string intersectKey, int expected)
+    {
+        var xs = XS[intersectKey];
+        var actual = xs.Length;
+
+        actual.ShouldBe(expected);
+    }
+
+    [Then(@"^(xs)\[(\d)\] = (.*)")]
+    [Then(@"^(xs)\[(\d)\]\.t = (.*)")]
+    public void ThenIntersctionValueShouldBe(string intersectKey, int index, double expected)
+    {
+        var xs = XS[intersectKey];
+        var actual = xs[index];
+        actual.t.ShouldBe(expected, Library.epsilon);
+    }
+
+    [Then(@"^(xs)\[(\d)\].object = (s)$")]
+    public void ThenIntersectionObjectShouldBe(string intersectKey, int index, string shapeKey)
+    {
+        var xs = XS[intersectKey];
+        var expected = Shape[shapeKey];
+        var actual = xs[index];
+
+        actual.@object.ShouldBe(expected);
+    }
+
+    [When(@"^(xs) ← intersect_world\((w), (r)\)$")]
+    public void WhenIntersectWorld(string key, string worldKey, string rayKey)
+    {
+        var w = World[worldKey];
+        var r = Ray[rayKey];
+
+        var xs = Raytracer.Scene.World.intersect(w, r) ;
+
+        XS[key] = xs.ToArray();
+    }
+
+
 }

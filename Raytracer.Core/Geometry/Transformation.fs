@@ -2,6 +2,8 @@ module Raytracer.Geometry.Transformation
 
 open Raytracer.Math.Matrix.M4
 
+let identity = identity
+
 let translation x y z =
     create 1. 0. 0. x 0. 1. 0. y 0. 0. 1. z 0. 0. 0. 1.
 

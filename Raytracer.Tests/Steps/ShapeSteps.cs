@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Reqnroll;
 using Shouldly;
 using Shape = Raytracer.Geometry.Shape.T;
@@ -8,50 +10,13 @@ namespace Raytracer.Tests.Steps;
 public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
     [StepArgumentTransformation(@"sphere\(\)")]
-    public static Shape ToSphere() => Geometry.Shape.sphere(System.DateTime.Now.Microsecond, Math.Matrix.M4.identity, MaterialSteps.ToMaterial());
+    public static Shape Create() => DefaultsBuilder.Sphere();
+
 
     [Given(@"^(s) ← (sphere.*)$")]
     public void GivenShape(string shapeKey, Shape shape)
     {
         Shape[shapeKey] = shape;
-    }
-
-    [When(@"^(xs) ← intersect\((s), (r)\)$")]
-    public void WhenCalculatingIntersection(string intersectKey, string shapeKey, string rayKey)
-    {
-        var s = Shape[shapeKey];
-        var r = Ray[rayKey];
-        var xs = Geometry.Intersection.intersect(s, r);
-
-        XS[intersectKey] = xs;
-    }
-
-    [Then(@"^(xs).count = (\d)$")]
-    public void ThenIntersectionCountShouldBe(string intersectKey, int expected)
-    {
-        var xs = XS[intersectKey];
-        var actual = xs.Length;
-
-        actual.ShouldBe(expected);
-    }
-
-    [Then(@"^(xs)\[(\d)\] = (.*)")]
-    [Then(@"^(xs)\[(\d)\]\.t = (.*)")]
-    public void ThenIntersctionValueShouldBe(string intersectKey, int index, double expected)
-    {
-        var xs = XS[intersectKey];
-        var actual = xs[index];
-        actual.t.ShouldBe(expected, Library.epsilon);
-    }
-
-    [Then(@"^(xs)\[(\d)\].object = (s)$")]
-    public void ThenIntersectionObjectShouldBe(string intersectKey, int index, string shapeKey)
-    {
-        var xs = XS[intersectKey];
-        var expected = Shape[shapeKey];
-        var actual = xs[index];
-
-        actual.@object.ShouldBe(expected);
     }
 
     [Then(@"^(s)\.transform = identity_matrix$")]
@@ -93,8 +58,8 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
         Geometry.Shape.setTransfrom(s, transform);
     }
 
-    [Given(@"^set_transform\((s), (m)\)$")    ]
-    public void GivenSetTransform(string shapeKey, string transformKey )
+    [Given(@"^set_transform\((s), (m)\)$")]
+    public void GivenSetTransform(string shapeKey, string transformKey)
     {
         var s = Shape[shapeKey];
         var t = Transformation[transformKey];
@@ -107,5 +72,18 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
         var s = Shape[shapeKey];
         var n = Geometry.Shape.normalAt(s, point);
         Tuple[key] = n;
+    }
+
+    [Given(@"^(s\d) ← sphere\(\) with:$")]
+    public void GivenSphereWith(string key, DataTable dataTable)
+    {
+        var s = Create();
+
+        dataTable
+            .Rows.Select(r => string.Join(" ", r.Values))
+            .Append(string.Join(" ", dataTable.Header)).
+            Aggregate(s, Raytracer.Parser.parseUpdate);
+
+        Shape[key] = s;
     }
 }
