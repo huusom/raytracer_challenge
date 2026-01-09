@@ -2,20 +2,23 @@ module Raytracer.Math.Tuple
 
 open Raytracer.Library
 
-[<CustomEquality; NoComparison>]
+[<Struct; NoComparison; CustomEquality>]
 type T =
     { x: float
       y: float
       z: float
       w: float }
 
+    override this.Equals obj =
+        match obj with
+        | :? T as other ->
+            eq this.x other.x
+            && eq this.y other.y
+            && eq this.z other.z
+            && eq this.w other.w
+        | _ -> false
 
-    interface System.IEquatable<T> with
-        member this.Equals(other: T) =
-            (eq this.x other.x)
-            && (eq this.y other.y)
-            && (eq this.z other.z)
-            && (eq this.w other.w)
+    override this.GetHashCode() : int = hash (this.x, this.y, this.z, this.w)
 
     static member (+)(l, r) =
         { x = l.x + r.x

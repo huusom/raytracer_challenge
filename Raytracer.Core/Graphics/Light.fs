@@ -1,5 +1,6 @@
 module Raytracer.Graphics.Light
 
+[<Struct>]
 type T =
     { position: Raytracer.Math.Tuple.T
       intensity: Color.T }

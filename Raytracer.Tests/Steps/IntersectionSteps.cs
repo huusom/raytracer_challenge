@@ -100,7 +100,7 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var xs = XS[intersectKey];
         var actual = xs[index];
-        actual.t.ShouldBe(expected, Library.epsilon);
+        actual.t.ShouldBe(expected);
     }
 
     [Then(@"^(xs)\[(\d)\].object = (s)$")]

@@ -36,7 +36,7 @@ public class MatrixSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var actual = Matrix[matrixKey][row, col];
         var expected = d / n;
-        actual.ShouldBe(expected, Library.epsilon);
+        actual.ShouldBe(expected);
     }
 
 

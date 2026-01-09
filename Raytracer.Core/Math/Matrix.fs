@@ -109,8 +109,9 @@ module M4 =
           m43: float
           m44: float }
 
-        interface System.IEquatable<T> with
-            member this.Equals(other: T) : bool =
+        override this.Equals obj =
+            match obj with
+            | :? T as other -> 
                 eq this.m11 other.m11
                 && eq this.m12 other.m12
                 && eq this.m13 other.m13
@@ -126,11 +127,7 @@ module M4 =
                 && eq this.m41 other.m41
                 && eq this.m42 other.m42
                 && eq this.m43 other.m43
-                && eq this.m44 other.m44
-
-        override this.Equals(obj) =
-            match obj with
-            | :? T as other -> (this :> System.IEquatable<T>).Equals other
+                && eq this.m44 other.m44            
             | _ -> false
 
         override this.GetHashCode() : int =

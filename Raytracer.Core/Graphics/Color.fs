@@ -2,19 +2,15 @@ module Raytracer.Graphics.Color
 
 open Raytracer.Library
 
-[<CustomEquality; NoComparison>]
+[<Struct; CustomEquality; NoComparison>]
 type T =
     { r: float
       g: float
       b: float }
 
-    interface System.IEquatable<T> with
-        member this.Equals(other: T) : bool =
-            eq this.r other.r && eq this.g other.g && eq this.b other.b
-
     override this.Equals obj =
         match obj with
-        | :? T as other -> (this :> System.IEquatable<T>).Equals other
+        | :? T as other -> eq this.r other.r && eq this.g other.g && eq this.b other.b
         | _ -> false
 
     override this.GetHashCode() = hash (this.r, this.g, this.b)

@@ -29,23 +29,23 @@ public class TupleSteps(ScenarioContext ctx) : StepsBase(ctx)
     [Then("a.x = {float}")]
     public void ThenXShouldBe(double x)
     {
-        Tuple["a"].x.ShouldBe(x, Raytracer.Library.epsilon);
+        Tuple["a"].x.ShouldBe(x);
     }
 
     [Then("a.y = {float}")]
     public void ThenYShouldBe(double x)
     {
-        Tuple["a"].y.ShouldBe(x, Raytracer.Library.epsilon);
+        Tuple["a"].y.ShouldBe(x);
     }
     [Then("a.z = {float}")]
     public void ThenZShouldBe(double x)
     {
-        Tuple["a"].z.ShouldBe(x, Raytracer.Library.epsilon);
+        Tuple["a"].z.ShouldBe(x);
     }
     [Then("a.w = {float}")]
     public void ThenWShouldBe(double x)
     {
-        Tuple["a"].w.ShouldBe(x, Raytracer.Library.epsilon);
+        Tuple["a"].w.ShouldBe(x);
     }
 
     [Then("a is a point")]

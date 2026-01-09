@@ -2,7 +2,7 @@ using Raytracer.Graphics;
 using Raytracer.Math;
 using Raytracer.Geometry;
 using Reqnroll;
-using System.Numerics;
+using Shouldly;
 namespace Raytracer.Tests.Steps;
 
 public class Item<T>(ScenarioContext ctx)
@@ -17,6 +17,12 @@ public class Item<T>(ScenarioContext ctx)
 [Binding]
 public class StepsBase(ScenarioContext ctx)
 {
+    [BeforeTestRun]
+    public static void BeforeTestRun()
+    {
+        ShouldlyConfiguration.DefaultFloatingPointTolerance = Library.epsilon;
+    }
+
     public readonly ScenarioContext ctx = ctx;
     public readonly Item<Color.T> Color = new(ctx);
     public readonly Item<Tuple.T> Tuple = new(ctx);
@@ -43,7 +49,7 @@ public static class DefaultsBuilder
 
     public static Shape.T Sphere(Matrix.M4.T transform = null, Material.T material = null) => Shape.sphere(transform ?? Transformation.identity, material ?? Material());
 
-    public static Material.T Material(Color.T color = null, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200) => Graphics.Material.create(color ?? Color.white, ambient, diffuse, specular, shininess);
+    public static Material.T Material(Color.T? color = null, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200) => Graphics.Material.create(color ?? Color.white, ambient, diffuse, specular, shininess);
 
-    public static Light.T PointLight(Tuple.T position = null, Color.T intensity = null) => Light.pointLight(position ?? Tuple.point(-10, 10, -10), intensity ?? Color.white);
+    public static Light.T PointLight(Tuple.T? position = null, Color.T? intensity = null) => Light.pointLight(position ?? Tuple.point(-10, 10, -10), intensity ?? Color.white);
 }

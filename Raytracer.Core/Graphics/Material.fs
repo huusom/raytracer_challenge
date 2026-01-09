@@ -12,17 +12,14 @@ type T =
       mutable specular: float
       mutable shininess: float }
 
-    interface System.IEquatable<T> with
-        member this.Equals(other: T) : bool =
+    override this.Equals(obj) =
+        match obj with
+        | :? T as other -> 
             eq this.ambient other.ambient
             && eq this.diffuse other.diffuse
             && eq this.specular other.specular
             && eq this.shininess other.shininess
             && this.color.Equals other.color
-
-    override this.Equals(obj) =
-        match obj with
-        | :? T as other -> (this :> System.IEquatable<T>).Equals other
         | _ -> false
 
     override this.GetHashCode() : int =

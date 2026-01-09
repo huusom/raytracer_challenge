@@ -2,6 +2,7 @@ module Raytracer.Geometry.Ray
 
 open Raytracer.Math
 
+[<Struct>]
 type T = { origin: Tuple.T; direction: Tuple.T }
 
 let create origin direction =

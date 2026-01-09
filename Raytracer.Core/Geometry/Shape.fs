@@ -10,15 +10,9 @@ module Sphere =
         { mutable transform: M4.T
           mutable material: Material.T }
 
-        interface System.IEquatable<T> with
-            member this.Equals(other: T) : bool =
-                let a = this.material.Equals other.material
-                let b = this.transform.Equals other.transform
-                a && b
-
         override this.Equals(obj) =
             match obj with
-            | :? T as other -> (this :> System.IEquatable<T>).Equals other
+            | :? T as other -> this.material.Equals other.material && this.transform.Equals other.transform
             | _ -> false
 
         override this.GetHashCode() : int = hash (this.transform, this.material)
@@ -47,14 +41,11 @@ module Sphere =
 type T =
     | Sphere of Sphere.T
 
-    interface System.IEquatable<T> with
-        member this.Equals(other: T) : bool =
-            match this, other with
-            | Sphere a, Sphere b -> a.Equals(b)
-
     override this.Equals obj =
         match obj with
-        | :? T as other -> (this :> System.IEquatable<T>).Equals other
+        | :? T as other ->
+            match this, other with
+            | Sphere a, Sphere b -> a.Equals b
         | _ -> false
 
     override this.GetHashCode() : int =
