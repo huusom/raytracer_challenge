@@ -78,4 +78,4 @@ let cross this other =
 
 let reflect v n = v - n * 2. * dot v n
 
-let ORIGIN = point 0. 0. 0.
+let origin = point 0. 0. 0.

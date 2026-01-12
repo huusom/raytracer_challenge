@@ -8,6 +8,8 @@ namespace Raytracer.Tests.Steps;
 [Binding]
 public class MaterialSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
+    private bool in_shadow;
+
     [StepArgumentTransformation(@"material\(\)")]
     public static Material Create() => DefaultsBuilder.Material();
 
@@ -54,6 +56,7 @@ public class MaterialSteps(ScenarioContext ctx) : StepsBase(ctx)
 
     [Given(@"^(result) ← lighting\((m), (light), (position), (eyev), (normalv)\)$")]
     [When(@"^(result) ← lighting\((m), (light), (position), (eyev), (normalv)\)$")]
+    [When(@"^(result) ← lighting\((m), (light), (position), (eyev), (normalv), in_shadow\)$")]
     public void WhenCreatingLightning(string key, string materialKey, string lightKey, string positionKey, string eyevKey, string normalvKey)
     {
         var material = Material[materialKey];
@@ -62,7 +65,13 @@ public class MaterialSteps(ScenarioContext ctx) : StepsBase(ctx)
         var eyev = Tuple[eyevKey];
         var normalv = Tuple[normalvKey];
 
-        Color[key] = Graphics.Material.lightning(material, light, position, eyev, normalv);
+        Color[key] = Graphics.Material.lightning(material, light, position, eyev, normalv, this.in_shadow);
     }
 
-}
+    [Given(@"^in_shadow ← (true|false)$")]
+    public void GivenInShadow(bool shadow)
+    {
+        this.in_shadow = shadow;
+    }
+
+}   

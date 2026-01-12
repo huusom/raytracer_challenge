@@ -1,22 +1,27 @@
 module Raytracer.Geometry.Intersection
 
 open Raytracer.Geometry.Shape
-open Raytracer.Math.Matrix.M4
+open Raytracer.Math.Matrix
+open Raytracer.Math
 
-module Computation =
+module Comps =
     type T =
         { t: float
           object: Shape.T
-          point: Raytracer.Math.Tuple.T
-          eye: Raytracer.Math.Tuple.T
-          normal: Raytracer.Math.Tuple.T }
+          point: Tuple.T
+          over: Tuple.T
+          eye: Tuple.T
+          normal: Tuple.T
+          inside: bool }
 
-    let create t object point eye normal =
+    let create t object point over eye normal inside =
         { t = t
           object = object
           point = point
+          over = over
           eye = eye
-          normal = normal }
+          normal = normal
+          inside = inside }
 
 type T = { t: float; object: Shape.T }
 
@@ -25,7 +30,7 @@ let create object t = { t = t; object = object }
 let sort xs = xs |> Seq.sortBy (fun i -> i.t)
 
 let intersect shape ray =
-    let r = shape |> Shape.getTransform |> inverse |> Ray.transform ray
+    let r = shape |> Shape.getTransform |> Transformation.inverse |> Ray.transform ray
 
     match shape with
     | Shape.Sphere _ -> Sphere.intersect r
@@ -37,5 +42,13 @@ let hit xs =
 
 let prepare i ray =
     let point = Ray.position ray i.t
+    let eye = -ray.direction
 
-    Computation.create i.t i.object point -ray.direction (Shape.normalAt i.object point)
+    let normal, inside =
+        match normalAt i.object point with
+        | n when Tuple.dot n eye < 0.0 -> -n, true
+        | n -> n, false
+
+    let over = point + normal * Raytracer.Library.epsilon
+
+    Comps.create i.t i.object point over -ray.direction normal inside

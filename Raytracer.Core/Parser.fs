@@ -12,8 +12,9 @@ let (|Float|_|) input =
 
 let parseFloat txt =
     match txt with
-    | Rx @"^π / (\d)$" [ Float v ] -> v
-    | Rx @"^√(\d)/(\d)$" [ Float d; Float n ] -> (sqrt d) / n
+    | Rx @"^π / (\d)$" [ Float v ] -> System.Math.PI / v
+    | Rx @"^π/(\d)$" [ Float v ] -> System.Math.PI / v
+    | Rx @"^√(\d)/(\d)$" [ Float d; Float n ] -> sqrt d / n
     | Rx @"^-√(\d)/(\d)$" [ Float d; Float n ] -> -(sqrt d) / n
     | Rx @"^√(\d+)$" [ Float f ] -> sqrt f
     | _ -> failwithf "'%s' does not match any pattern." txt
@@ -26,6 +27,8 @@ let parseUpdate shape txt =
         (Geometry.Shape.getMaterial shape).color <- Graphics.Color.create r g b
     | Rx @"^transform scaling\((.*), (.*), (.*)\)$" [ Float x; Float y; Float z ] ->
         Geometry.Shape.setTransfrom shape (Geometry.Transformation.scaling x y z)
+    | Rx @"^transform translation\((.*), (.*), (.*)\)$" [ Float x; Float y; Float z ] ->
+        Geometry.Shape.setTransfrom shape (Geometry.Transformation.translation x y z)
     | _ -> failwithf "'%s' does not match any pattern." txt
 
     shape

@@ -7,7 +7,7 @@ namespace Raytracer.Tests.Steps;
 [Binding]
 public class ColorSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
- 
+
     [StepArgumentTransformation(@"color\((.*), (.*), (.*)\)")]
     public static Color Create(double r, double g, double b) => Graphics.Color.create(r, g, b);
 
@@ -74,10 +74,12 @@ public class ColorSteps(ScenarioContext ctx) : StepsBase(ctx)
         actual.ShouldBe(expected);
     }
 
-    [Then(@"^(result) = (color.*)$")]
+    [Then(@"^(result|c) = (color.*)$")]
     public void ThenColorShouldBe(string key, Color expected)
     {
         var actual = Color[key];
         actual.ShouldBe(expected);
     }
+
+
 }

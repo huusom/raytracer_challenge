@@ -62,18 +62,17 @@ public class RaySteps(ScenarioContext ctx) : StepsBase(ctx)
         Ray[key] = Geometry.Ray.transform(r, m);
     }
 
-    [Then(@"^(r2)\.origin = (point.*)$")]
+    [Then(@"^(r|r2)\.origin = (point.*)$")]
     public void ThenOriginShouldBe(string rayKey, Tuple expected)
     {
         var r = Ray[rayKey];
         r.origin.ShouldBe(expected);
     }    
 
-    [Then(@"^(r2)\.direction = (vector.*)$")]
+    [Then(@"^(r|r2)\.direction = (vector.*)$")]
     public void ThenDirectionShouldBe(string rayKey, Tuple expected)
     {
         var r = Ray[rayKey];
         r.direction.ShouldBe(expected);
     }
-
 }

@@ -71,6 +71,6 @@ let normalAt shape point =
     let transform = getTransform shape
     let inv = transform |> M4.inverse
     let object_point = inv * point
-    let object_normal = object_point - Tuple.ORIGIN
+    let object_normal = object_point - Tuple.origin
     let world_point = M4.transpose inv * object_normal
     Tuple.vector world_point.x world_point.y world_point.z |> Tuple.normalize

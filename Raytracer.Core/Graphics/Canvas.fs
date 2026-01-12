@@ -9,7 +9,7 @@ type T =
         with get (x, y) = this.p[y * this.h + x]
         and set (x, y) v = this.p[y * this.h + x] <- v
 
-let canvas w h =
+let create w h =
     { w = w
       h = h
       p = Array.create (w * h) Color.black }

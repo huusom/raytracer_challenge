@@ -13,7 +13,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
     public static Shape Create() => DefaultsBuilder.Sphere();
 
 
-    [Given(@"^(s|shape) ← (sphere.*)$")]
+    [Given(@"^(s|shape|s1) ← (sphere.*)$")]
     public void GivenShape(string shapeKey, Shape shape)
     {
         Shape[shapeKey] = shape;
@@ -85,5 +85,23 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
             Aggregate(s, Raytracer.Parser.parseUpdate);
 
         Shape[key] = s;
+    }
+
+    [Given(@"^(outer|inner)\.material\.ambient ← (.*)$")]
+    public void GivenMaterialAmbient(string key, double value)
+    {
+        var shape = Shape[key];
+        Raytracer.Geometry.Shape.getMaterial(shape).ambient = value;
+    }
+
+    [Then(@"(c) = (inner)\.material\.color")]
+    public void ThenMaterialColorShouldBe(string key, string expectedKey)
+    {
+        var shape = Shape[expectedKey];
+        var expected = Geometry.Shape.getMaterial(shape);
+        var actual = Color[key];
+
+        actual.ShouldBe(expected.color); 
+        
     }
 }

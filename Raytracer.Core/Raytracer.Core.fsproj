@@ -15,7 +15,7 @@
     
     <Compile Include="Geometry/Ray.fs" /><Compile Include="Geometry/Shape.fs" />
     <Compile Include="Geometry/Intersection.fs" />
-    <Compile Include="Scene/World.fs" />   
+    <Compile Include="Scene/World.fs" /><Compile Include="Scene/Camera.fs" />   
     <Compile Include="Parser.fs" />
   </ItemGroup>
 </Project>

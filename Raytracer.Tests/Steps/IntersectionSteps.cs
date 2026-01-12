@@ -1,5 +1,6 @@
 using Reqnroll;
 using Shouldly;
+using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -8,8 +9,9 @@ namespace Raytracer.Tests.Steps;
 [Binding]
 public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
-    [When(@"^(i) ← intersection\((.*), (s|shape)\)$")]
+    [When(@"^(i) ← intersection\((.*), (s)\)$")]
     [Given(@"^(i1|i2|i3|i4) ← intersection\((.*), (s)\)$")]
+    [Given(@"^(i) ← intersection\((.*), (shape|s2)\)$")]
     public void GivenIntersection(string key, double t, string shapeKey)
     {
         var s = Shape[shapeKey];
@@ -125,15 +127,64 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
         XS[key] = xs.ToArray();
     }
 
-    [When(@"(comps) ← prepare_computations\((i), (r)\)")]
+    [When(@"^(comps) ← prepare_computations\((i), (r)\)$")]
     public void WhenPrepareComputations(string key, string intersectKey, string rayKey)
     {
         var i = I[intersectKey];
         var r = Ray[rayKey];
 
         var c = Raytracer.Geometry.Intersection.prepare(i, r);
-        Computation[key] = c; 
+        Comps[key] = c;
     }
 
+    [Then(@"^(comps)\.t = (i)\.t$")]
+    public void ThenCompsTShouldBe(string key, string expectedKey)
+    {
+        var comps = Comps[key];
+        var i = I[expectedKey];
+
+        comps.t.ShouldBe(i.t);
+    }
+
+    [Then(@"^(comps)\.object = (i)\.object$")]
+    public void ThenCompsObjectShouldBe(string key, string expectedKey)
+    {
+        var comps = Comps[key];
+        var i = I[expectedKey];
+
+        comps.@object.ShouldBe(i.@object);
+    }
+
+    [Then(@"^(comps)\.inside = (false|true)$")]
+    public void ThenCompsInsideShouldBe(string key, bool expected)
+    {
+        var comps = Comps[key];
+
+        comps.inside.ShouldBe(expected);
+    }
+
+    [Then(@"(comps)\.point = (point.*)$")]
+    public void ThenCompsPointShouldBe(string key, Math.Tuple.T expected)
+    {
+        var comps = Comps[key];
+
+        comps.point.ShouldBe(expected);
+    }
+
+    [Then(@"(comps)\.eyev = (vector.*)$")]
+    public void ThenCompsEyeShouldBe(string key, Math.Tuple.T expected)
+    {
+        var comps = Comps[key];
+
+        comps.eye.ShouldBe(expected);
+    }
+
+    [Then(@"^(comps)\.normalv = (vector.*)$")]
+    public void ThenCompsNormalShouldBe(string key, Math.Tuple.T expected)
+    {
+        var comps = Comps[key];
+
+        comps.normal.ShouldBe(expected);
+    }
 
 }

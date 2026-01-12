@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Reqnroll;
 using Shouldly;
@@ -11,7 +12,7 @@ namespace Raytracer.Tests.Steps;
 public class CanvasSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
     [StepArgumentTransformation(@"canvas\((.*), (.*)\)")]
-    public static Canvas ToCanvas(int w, int h) => Graphics.Canvas.canvas(w, h);
+    public static Canvas ToCanvas(int w, int h) => Graphics.Canvas.create(w, h);
 
     private IEnumerable<string> ppm;
 
@@ -49,6 +50,14 @@ public class CanvasSteps(ScenarioContext ctx) : StepsBase(ctx)
         var red = Color[k2];
 
         c[x, y] = red;
+    }
+
+    [Then(@"^pixel_at\((image), (\d+), (\d+)\) = (color.*)$")]
+    public void PixelAtShouldBe(string canvasKey, int x, int y, Raytracer.Graphics.Color.T color)
+    {
+        var canvas = Canvas[canvasKey];
+
+        canvas[x, y].ShouldBe(color);
     }
 
     [Then(@"^pixel_at\((c), (2), (3)\) = (red)$")]

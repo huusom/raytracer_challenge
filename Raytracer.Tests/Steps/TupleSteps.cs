@@ -19,8 +19,8 @@ public class TupleSteps(ScenarioContext ctx) : StepsBase(ctx)
     [Given(@"^(a|a1|a2|b) ← (tuple.*)$")]
     [Given(@"^(p|p1|p2) ← (point.*)$")]
     [Given(@"^(v|v1|v2|zero|a|b|n) ← (vector.*)$")]
-    [Given(@"^(eyev|normalv) ← (vector.*)$")]
-    [Given(@"^(position) ← (point.*)$")]
+    [Given(@"^(eyev|normalv|up) ← (vector.*)$")]
+    [Given(@"^(position|from|to) ← (point.*)$")]
     public void GivenTuple(string k, Tuple tuple)
     {
         Tuple[k] = tuple;

@@ -1,32 +1,39 @@
 using Reqnroll;
 using Shouldly;
-using Matrix = Raytracer.Math.Matrix.M4.T;
-using Tuple = Raytracer.Math.Tuple.T;
+using Raytracer.Math;
+using System.Linq;
 
 namespace Raytracer.Tests.Steps;
 
 [Binding]
 public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
+    [StepArgumentTransformation()]
+    public static Matrix.M4.T CreateMatrix(DataTable table)
+    {
+        var elements = table.Header.Concat(table.Rows.SelectMany(r => r.Values)).Select(System.Convert.ToDouble).ToArray();
+        return Math.Matrix.M4.ofArray(elements);
+    }
+
     [StepArgumentTransformation(@"translation\((.*), (.*), (.*)\)")]
-    public static Matrix ToTranslation(double x, double y, double z) => Geometry.Transformation.translation(x, y, z);
+    public static Matrix.M4.T ToTranslation(double x, double y, double z) => Geometry.Transformation.translation(x, y, z);
 
     [StepArgumentTransformation(@"scaling\((.*), (.*), (.*)\)")]
-    public static Matrix ToScaling(double x, double y, double z) => Geometry.Transformation.scaling(x, y, z);
+    public static Matrix.M4.T ToScaling(double x, double y, double z) => Geometry.Transformation.scaling(x, y, z);
 
     [StepArgumentTransformation(@"shearing\((.*), (.*), (.*), (.*), (.*), (.*)\)")]
-    public static Matrix ToShearing(double xy, double xz, double yx, double yz, double zx, double zy) => Geometry.Transformation.shearing(xy, xz, yx, yz, zx, zy);
+    public static Matrix.M4.T ToShearing(double xy, double xz, double yx, double yz, double zx, double zy) => Geometry.Transformation.shearing(xy, xz, yx, yz, zx, zy);
 
     [StepArgumentTransformation(@"rotation_x\((.*)\)")]
-    public static Matrix ToRotationX(double radians) => Geometry.Transformation.rotation_x(System.Math.PI / radians);
+    public static Matrix.M4.T ToRotationX(double radians) => Geometry.Transformation.rotation_x(radians);
 
     [StepArgumentTransformation(@"rotation_y\((.*)\)")]
-    public static Matrix ToRotationY(double radians) => Geometry.Transformation.rotation_y(System.Math.PI / radians);
+    public static Matrix.M4.T ToRotationY(double radians) => Geometry.Transformation.rotation_y(radians);
 
     [StepArgumentTransformation(@"rotation_z\((.*)\)")]
-    public static Matrix ToRotationZ(double radians) => Geometry.Transformation.rotation_z(System.Math.PI / radians);
+    public static Matrix.M4.T ToRotationZ(double radians) => Geometry.Transformation.rotation_z(radians);
 
-    [StepArgumentTransformation(@"(π / \d|\-?√\d/\d|√\d+)")]
+    [StepArgumentTransformation(@"(π / \d|π/\d|\-?√\d/\d|√\d+)")]
     public static double ToDouble(string arg) => Parser.parseFloat(arg);
 
     [Given(@"^(transform|C|m|t) ← (translation.*)$")]
@@ -35,7 +42,7 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     [Given(@"(half_quarter|full_quarter|A) ← (rotation_x.*)")]
     [Given(@"(half_quarter|full_quarter) ← (rotation_y.*)")]
     [Given(@"(half_quarter|full_quarter) ← (rotation_z.*)")]
-    public void GivenTranslation(string transformationKey, Matrix translation)
+    public void GivenTranslation(string transformationKey, Matrix.M4.T translation)
     {
         Transformation[transformationKey] = translation;
     }
@@ -48,7 +55,7 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
 
     [Then(@"^(transform|inv|half_quarter|full_quarter|T) \* (p) = (point.*)$")]
     [Then(@"^(transform|inv) \* (v) = (vector.*)$")]
-    public void ThenTransformationMultiplicationsShouldBe(string transformationKey, string tupleKey, Tuple expected)
+    public void ThenTransformationMultiplicationsShouldBe(string transformationKey, string tupleKey, Tuple.T expected)
     {
         var t = Transformation[transformationKey];
         var p = Tuple[tupleKey];
@@ -87,16 +94,48 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     }
 
     [Then(@"^(p2|p3|p4) = (point.*)$")]
-    public void ThenPointShouldBe(string tupleKey, Tuple expected)
+    public void ThenPointShouldBe(string tupleKey, Tuple.T expected)
     {
         var actual = Tuple[tupleKey];
         actual.ShouldBe(expected);
     }
 
     [Given(@"^(m) ← (scaling.*) \* (rotation_z.*)$")]
-    public void GivenTransformationAsProduct(string key, Matrix scaling, Matrix rotation)
+    public void GivenTransformationAsProduct(string key, Matrix.M4.T scaling, Matrix.M4.T rotation)
     {
         Transformation[key] = scaling * rotation;
+    }
+
+    [Then(@"^(t) = (scaling.*)$")]
+    [Then(@"^(t) = (translation.*)$")]
+    public void ThenTransformShouldBe(string key, Matrix.M4.T expected)
+    {
+        var actual = Transformation[key];
+        actual.ShouldBe(expected);
+    }
+
+    [When(@"^(t) ← view_transform\((from), (to), (up)\)$")]
+    public void ViewTransform(string key, string fromKey, string toKey, string upKey)
+    {
+        var from = Tuple[fromKey];
+        var to = Tuple[toKey];
+        var up = Tuple[upKey];
+
+        var t = Geometry.Transformation.view(from, to, up);
+        Transformation[key] = t;
+    }
+
+    [Then(@"^(t) = identity_matrix$")]
+    public void ThenTransformationShouldBeIdentityMatrix(string key)
+    {
+        Transformation[key].ShouldBe(Math.Matrix.M4.identity);
+    }
+
+    [Then(@"^(t) is the following \dx\d matrix:$")]
+    public void ThenTransformationEqualityShouldBe(string key, Matrix.M4.T expected)
+    {
+        var actual = Transformation[key];
+        actual.ShouldBe(expected);
     }
 
 
