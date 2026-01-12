@@ -8,8 +8,6 @@ let create objects lights = { objects = objects; lights = lights }
 
 let intersect world ray =
     world.objects
-    |> Seq.collect (fun shape -> Raytracer.Geometry.Intersection.intersect shape ray) 
-    |> Raytracer.Geometry.Intersection.sort 
-    
-  
-
+    |> Seq.collect (fun shape -> Raytracer.Geometry.Intersection.intersect shape ray)
+    |> Raytracer.Geometry.Intersection.sort
+    |> Array.ofSeq

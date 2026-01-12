@@ -13,7 +13,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
     public static Shape Create() => DefaultsBuilder.Sphere();
 
 
-    [Given(@"^(s) ← (sphere.*)$")]
+    [Given(@"^(s|shape) ← (sphere.*)$")]
     public void GivenShape(string shapeKey, Shape shape)
     {
         Shape[shapeKey] = shape;

@@ -1,13 +1,14 @@
 using Reqnroll;
 using Shouldly;
-using System.Linq; 
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Raytracer.Tests.Steps;
 
 [Binding]
 public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
-    [When(@"^(i) ← intersection\((.*), (s)\)$")]
+    [When(@"^(i) ← intersection\((.*), (s|shape)\)$")]
     [Given(@"^(i1|i2|i3|i4) ← intersection\((.*), (s)\)$")]
     public void GivenIntersection(string key, double t, string shapeKey)
     {
@@ -119,9 +120,19 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
         var w = World[worldKey];
         var r = Ray[rayKey];
 
-        var xs = Raytracer.Scene.World.intersect(w, r) ;
+        var xs = Raytracer.Scene.World.intersect(w, r);
 
         XS[key] = xs.ToArray();
+    }
+
+    [When(@"(comps) ← prepare_computations\((i), (r)\)")]
+    public void WhenPrepareComputations(string key, string intersectKey, string rayKey)
+    {
+        var i = I[intersectKey];
+        var r = Ray[rayKey];
+
+        var c = Raytracer.Geometry.Intersection.prepare(i, r);
+        Computation[key] = c; 
     }
 
 

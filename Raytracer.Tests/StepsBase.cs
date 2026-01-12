@@ -36,6 +36,8 @@ public class StepsBase(ScenarioContext ctx)
     public readonly Item<Light.T> Light = new(ctx);
     public readonly Item<Material.T> Material = new(ctx);
     public readonly Item<Scene.World.T> World = new(ctx);
+
+    public readonly Item<Intersection.Computation.T> Computation = new (ctx);
 }
 
 
