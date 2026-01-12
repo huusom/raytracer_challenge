@@ -73,7 +73,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
         var w = World[key];
         var l = Graphics.Light.pointLight(position, intensity);
 
-        World[key] = Scene.World.add_light(w, l);
+        World[key] = Scene.World.create(w.objects, [l]);
     }
 
 
@@ -108,13 +108,13 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
         actual.ShouldBe(expected);
     }
 
-    [Given(@"^(s1|s2) is added to (w)$")] 
+    [Given(@"^(s1|s2) is added to (w)$")]
     public void GivenAddedShape(string shapeKey, string key)
     {
         var s = Shape[shapeKey];
         var w = World[key];
 
-        World[key] = Scene.World.add_shape(w, s); 
+        World[key] = Scene.World.add_shape(w, s);
     }
 
 }

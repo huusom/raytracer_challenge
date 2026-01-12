@@ -4,23 +4,27 @@ open Raytracer.Math
 open Raytracer.Math.Matrix
 open Raytracer.Graphics
 
-module Sphere =
-    [<CustomEquality; NoComparison>]
-    type T =
-        { mutable transform: M4.T
-          mutable material: Material.T }
+[<CustomEquality; NoComparison>]
+type T =
+    { mutable transform: M4.T
+      mutable material: Material.T
+      intersect: Ray.T -> seq<float>
+      normal: Tuple.T -> Tuple.T }
 
-        override this.Equals(obj) =
-            match obj with
-            | :? T as other -> this.material.Equals other.material && this.transform.Equals other.transform
-            | _ -> false
+    override this.Equals(obj) =
+        match obj with
+        | :? T as other -> this.material.Equals other.material && this.transform.Equals other.transform
+        | _ -> false
 
-        override this.GetHashCode() : int = hash (this.transform, this.material)
+    override this.GetHashCode() : int = hash (this.transform, this.material)
 
-    let create transform material =
-        { transform = transform
-          material = material }
+let create transform material intersect normal =
+    { transform = transform
+      material = material
+      intersect = intersect
+      normal = normal }
 
+let sphere transform material =
     let intersect (ray: Ray.T) =
         let str = ray.origin - Tuple.point 0. 0. 0.
         let a = Tuple.dot ray.direction ray.direction
@@ -37,40 +41,32 @@ module Sphere =
                 (-b + sqrt discrimant) / (2. * a)
             }
 
-[<CustomEquality; NoComparison>]
-type T =
-    | Sphere of Sphere.T
+    let normal point = point - Tuple.origin
 
-    override this.Equals obj =
-        match obj with
-        | :? T as other ->
-            match this, other with
-            | Sphere a, Sphere b -> a.Equals b
-        | _ -> false
+    create transform material intersect normal
 
-    override this.GetHashCode() : int =
-        match this with
-        | Sphere s -> hash s
+let test transform material (save_ray: System.Action<Ray.T>) =
+    let intersect ray =
+        save_ray.Invoke ray
+        Seq.empty
 
-let sphere transform material =
-    Sphere.create transform material |> Sphere
+    create transform material intersect Tuple.to_vector
 
-let getTransform shape =
-    match shape with
-    | Sphere s -> s.transform
+let plane transform material =
+    let n = Tuple.vector 0 1 0
 
-let setTransfrom shape m =
-    match shape with
-    | Sphere s -> s.transform <- m
+    let intersect (ray: Ray.T) =
+        if abs ray.direction.y < Raytracer.Library.epsilon then
+            Seq.empty
+        else
+            Seq.singleton (-ray.origin.y / ray.direction.y)
 
-let getMaterial shape =
-    match shape with
-    | Sphere s -> s.material
+    create transform material intersect (fun _ -> n)
 
 let normalAt shape point =
-    let transform = getTransform shape
-    let inv = transform |> M4.inverse
-    let object_point = inv * point
-    let object_normal = object_point - Tuple.origin
-    let world_point = M4.transpose inv * object_normal
-    Tuple.vector world_point.x world_point.y world_point.z |> Tuple.normalize
+    let inverse = Transformation.inverse shape.transform
+    let local_point = inverse * point
+    let local_normal = shape.normal local_point
+    let world_normal = Transformation.transpose inverse * local_normal
+
+    world_normal |> Tuple.to_vector |> Tuple.normalize

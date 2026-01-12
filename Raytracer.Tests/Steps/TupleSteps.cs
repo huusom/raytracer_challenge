@@ -72,7 +72,7 @@ public class TupleSteps(ScenarioContext ctx) : StepsBase(ctx)
     }
 
     [Then(@"^(a|p|v) = (tuple.*)$")]
-    [Then(@"^(n|r) = (vector.*)$")]
+    [Then(@"^(n|r|n\d) = (vector.*)$")]
     public void ThenTupleShouldBe(string k, Tuple expected)
     {
         var actual = Tuple[k];

@@ -17,15 +17,6 @@ let add_shape world shape =
             }
             |> Array.ofSeq }
 
-let add_light world light =
-    { world with
-        lights =
-            seq {
-                yield! world.lights
-                yield light
-            }
-            |> Array.ofSeq }
-
 let intersect world ray =
     world.objects
     |> Seq.collect (fun shape -> Geometry.Intersection.intersect shape ray)
@@ -45,7 +36,7 @@ let in_shadow world point =
 
 let shade world (comps: Geometry.Intersection.Comps.T) =
     let s = in_shadow world comps.over
-    let m = Geometry.Shape.getMaterial comps.object
+    let m = comps.object.material
     Graphics.Material.lightning m world.lights[0] comps.point comps.eye comps.normal s
 
 let color world ray =

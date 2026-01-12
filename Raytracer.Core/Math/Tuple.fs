@@ -55,6 +55,8 @@ let tuple x y z w = { x = x; y = y; w = w; z = z }
 let vector x y z = tuple x y z 0.0
 let point x y z = tuple x y z 1.0
 
+let to_vector t = vector t.x t.y t.z 
+
 let magnitude this =
     sqrt (this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w)
 

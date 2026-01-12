@@ -19,16 +19,16 @@ let parseFloat txt =
     | Rx @"^√(\d+)$" [ Float f ] -> sqrt f
     | _ -> failwithf "'%s' does not match any pattern." txt
 
-let parseUpdate shape txt =
+let parseUpdate (shape: Geometry.Shape.T) txt =
     match txt with
-    | Rx @"^material.specular (.*)$" [ Float s ] -> (Geometry.Shape.getMaterial shape).specular <- s
-    | Rx @"^material.diffuse (.*)$" [ Float s ] -> (Geometry.Shape.getMaterial shape).diffuse <- s
+    | Rx @"^material.specular (.*)$" [ Float s ] -> shape.material.specular <- s
+    | Rx @"^material.diffuse (.*)$" [ Float s ] -> shape.material.diffuse <- s
     | Rx @"^material.color \((.*), (.*), (.*)\)$" [ Float r; Float g; Float b ] ->
-        (Geometry.Shape.getMaterial shape).color <- Graphics.Color.create r g b
+        shape.material.color <- Graphics.Color.create r g b
     | Rx @"^transform scaling\((.*), (.*), (.*)\)$" [ Float x; Float y; Float z ] ->
-        Geometry.Shape.setTransfrom shape (Geometry.Transformation.scaling x y z)
+        shape.transform <- Geometry.Transformation.scaling x y z
     | Rx @"^transform translation\((.*), (.*), (.*)\)$" [ Float x; Float y; Float z ] ->
-        Geometry.Shape.setTransfrom shape (Geometry.Transformation.translation x y z)
+        shape.transform <- (Geometry.Transformation.translation x y z)
     | _ -> failwithf "'%s' does not match any pattern." txt
 
     shape

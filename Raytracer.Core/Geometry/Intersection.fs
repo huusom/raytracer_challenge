@@ -1,7 +1,6 @@
 module Raytracer.Geometry.Intersection
 
 open Raytracer.Geometry.Shape
-open Raytracer.Math.Matrix
 open Raytracer.Math
 
 module Comps =
@@ -30,10 +29,9 @@ let create object t = { t = t; object = object }
 let sort xs = xs |> Seq.sortBy (fun i -> i.t)
 
 let intersect shape ray =
-    let r = shape |> Shape.getTransform |> Transformation.inverse |> Ray.transform ray
+    let r = shape.transform |> Transformation.inverse |> Ray.transform ray
 
-    match shape with
-    | Shape.Sphere _ -> Sphere.intersect r
+    shape.intersect r
     |> Seq.map (create shape)
     |> Array.ofSeq
 

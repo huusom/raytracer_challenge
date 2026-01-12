@@ -1,6 +1,5 @@
 using Reqnroll;
 using Raytracer.Graphics;
-using Material = Raytracer.Graphics.Material.T;
 using Shouldly;
 
 namespace Raytracer.Tests.Steps;
@@ -11,12 +10,27 @@ public class MaterialSteps(ScenarioContext ctx) : StepsBase(ctx)
     private bool in_shadow;
 
     [StepArgumentTransformation(@"material\(\)")]
-    public static Material Create() => DefaultsBuilder.Material();
+    public static Material.T Create() => DefaultsBuilder.Material();
 
     [Given(@"^(m) ← (material\(\))$")]
-    public void GivenMaterial(string key, Material m)
+    public void GivenMaterial(string key, Material.T m)
     {
         Material[key] = m;
+    }
+
+    [Given(@"^(m)\.ambient ← (\d+)$")]
+    public void GivenAmbient(string key, double ambient)
+    {
+        var m = Material[key];
+        m.ambient = ambient;
+    }
+
+    [Then(@"^(m) = (material\(\))$")]
+    public void ThenMaterialShouldBe(string key, Material.T expected)
+    {
+        var actual = Material[key];
+
+        actual.ShouldBe(expected);
     }
 
     [Then(@"^(m)\.color = (color.*)$")]

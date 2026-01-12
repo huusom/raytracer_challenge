@@ -97,6 +97,14 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
         actual.ShouldBe(expected);
     }
 
+    [Then(@"^(xs) is empty$")]
+    public void ThenXsShouldBeEmpty(string key)
+    {
+        var xs = XS[key];
+
+        xs.ShouldBeEmpty();
+    }
+
     [Then(@"^(xs)\[(\d)\] = (.*)")]
     [Then(@"^(xs)\[(\d)\]\.t = (.*)")]
     public void ThenIntersctionValueShouldBe(string intersectKey, int index, double expected)
@@ -106,7 +114,7 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
         actual.t.ShouldBe(expected);
     }
 
-    [Then(@"^(xs)\[(\d)\].object = (s)$")]
+    [Then(@"^(xs)\[(\d)\].object = (s|p)$")]
     public void ThenIntersectionObjectShouldBe(string intersectKey, int index, string shapeKey)
     {
         var xs = XS[intersectKey];
@@ -185,6 +193,21 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
         var comps = Comps[key];
 
         comps.normal.ShouldBe(expected);
+    }
+
+
+    [Then(@"^(comps)\.over_point.z < -EPSILON/2$")]
+    public void ThenCompsOverZShouldBe(string key)
+    {
+        var comps = Comps[key];
+        comps.over.z.ShouldBeLessThan(-Library.epsilon / 2);
+    }
+
+    [Then(@"^(comps)\.point\.z > comps\.over_point\.z$")]
+    public void ThenCompsPointZShouldBe(string key)
+    {
+        var comps = Comps[key];
+        comps.point.z.ShouldBeGreaterThan(comps.over.z);
     }
 
 }
