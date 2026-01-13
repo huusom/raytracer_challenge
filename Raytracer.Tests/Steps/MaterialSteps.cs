@@ -79,7 +79,7 @@ public class MaterialSteps(ScenarioContext ctx) : StepsBase(ctx)
         var eyev = Tuple[eyevKey];
         var normalv = Tuple[normalvKey];
 
-        Color[key] = Graphics.Material.lightning(material, light, position, eyev, normalv, this.in_shadow);
+        Color[key] = Graphics.Material.lightningFrom(material, light, position, eyev, normalv, this.in_shadow);
     }
 
     [Given(@"^in_shadow ← (true|false)$")]

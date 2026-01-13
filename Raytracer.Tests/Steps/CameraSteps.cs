@@ -39,7 +39,7 @@ public class CameraSteps(ScenarioContext ctx) : StepsBase(ctx)
     [When(@"^(c) ← camera\(hsize, vsize, field_of_view\)$")]
     public void GivenCamera(string key)
     {
-        Camera[key] = Raytracer.Scene.Camera.init(hsize, vsize, fov);
+        Camera[key] = Raytracer.Scene.Camera.cameraOf(hsize, vsize, fov);
     }
 
     [Then(@"^(c)\.hsize = (\d+)$")]
@@ -81,7 +81,7 @@ public class CameraSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void CreateRayForPixel(string key, string cameraKey, int x, int y)
     {
         var c = Camera[cameraKey];
-        var r = Scene.Camera.ray(c, x, y);
+        var r = Scene.Camera.rayFor(c, x, y);
 
         Ray[key] = r; 
     }
@@ -96,7 +96,7 @@ public class CameraSteps(ScenarioContext ctx) : StepsBase(ctx)
     [Given(@"^(c).transform ← view_transform\(from, to, up\)$")]
     public void GivenViewTransform(string key)
     {
-        var t = Geometry.Transformation.view(Tuple["from"], Tuple["to"], Tuple["up"]);
+        var t = Geometry.Transformation.viewOf(Tuple["from"], Tuple["to"], Tuple["up"]);
         var c = Camera[key];
         c.transform = t; 
     }

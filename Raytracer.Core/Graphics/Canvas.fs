@@ -14,7 +14,7 @@ let create w h =
       h = h
       p = Array.create (w * h) Color.black }
 
-let toPortablePixmap canvas =
+let portablePixmapOf canvas =
     seq {
         yield "P3"
         yield sprintf "%i %i" canvas.w canvas.h
@@ -22,7 +22,7 @@ let toPortablePixmap canvas =
 
         for y in [ 0 .. canvas.h - 1 ] do
             let line =
-                [ for x in 0 .. canvas.w - 1 -> Color.toInt canvas[x, y] ]
+                [ for x in 0 .. canvas.w - 1 -> Color.intsFrom canvas[x, y] ]
                 |> List.concat
                 |> List.map (sprintf "%i")
                 |> String.concat " "

@@ -71,7 +71,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void GivenPointLight(string key, Math.Tuple.T position, Graphics.Color.T intensity)
     {
         var w = World[key];
-        var l = Graphics.Light.pointLight(position, intensity);
+        var l = Graphics.Light.pointLightOf(position, intensity);
 
         World[key] = Scene.World.create(w.objects, [l]);
     }

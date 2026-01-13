@@ -28,25 +28,25 @@ let create object t = { t = t; object = object }
 
 let sort xs = xs |> Seq.sortBy (fun i -> i.t)
 
-let intersect shape ray =
-    let r = shape.transform |> Transformation.inverse |> Ray.transform ray
+let intersectionsOf shape ray =
+    let r = shape.transform |> Transformation.inverse |> Ray.transformationOf ray
 
     shape.intersect r
     |> Seq.map (create shape)
     |> Array.ofSeq
 
-let hit xs =
+let hitFrom xs =
     xs |> sort |> Seq.skipWhile (fun i -> i.t < 0.) |> Seq.tryHead
 
-let prepare i ray =
-    let point = Ray.position ray i.t
+let compsFrom i ray =
+    let point = Ray.positionFrom ray i.t
     let eye = -ray.direction
 
     let normal, inside =
-        match normalAt i.object point with
+        match normalFrom i.object point with
         | n when Tuple.dot n eye < 0.0 -> -n, true
         | n -> n, false
 
-    let over = point + normal * Raytracer.Library.epsilon
+    let over = point + normal * epsilon
 
     Comps.create i.t i.object point over -ray.direction normal inside

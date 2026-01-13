@@ -84,7 +84,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void WhenSettingNormal(string key, string shapeKey, Math.Tuple.T point)
     {
         var s = Shape[shapeKey];
-        var n = Geometry.Shape.normalAt(s, point);
+        var n = Geometry.Shape.normalFrom(s, point);
         Tuple[key] = n;
     }
 
@@ -94,7 +94,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
         dataTable
             .Rows.Select(r => string.Join(" ", r.Values))
             .Append(string.Join(" ", dataTable.Header)).
-            Aggregate(shape, Raytracer.Parser.parseUpdate);
+            Aggregate(shape, Raytracer.IO.Parser.updateShapeFrom);
 
         Shape[key] = shape;
     }
@@ -168,7 +168,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var p = Shape[planeKey];
         var r = Ray[rayKey];
-        XS[key] = Intersection.intersect(p, r);
+        XS[key] = Intersection.intersectionsOf(p, r);
     }
 }
 

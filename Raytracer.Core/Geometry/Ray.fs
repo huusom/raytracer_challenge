@@ -12,7 +12,7 @@ let create origin direction =
     { origin = origin
       direction = direction }
 
-let position ray t = ray.origin + ray.direction * t
+let positionFrom ray t = ray.origin + ray.direction * t
 
-let transform ray (m: Matrix.M4.T) =
+let transformationOf ray (m: Matrix.M4.T) =
     create (m * ray.origin) (m * ray.direction)

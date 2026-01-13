@@ -16,25 +16,25 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     }
 
     [StepArgumentTransformation(@"translation\((.*), (.*), (.*)\)")]
-    public static Matrix.M4.T ToTranslation(double x, double y, double z) => Geometry.Transformation.translation(x, y, z);
+    public static Matrix.M4.T ToTranslation(double x, double y, double z) => Geometry.Transformation.translationOf(x, y, z);
 
     [StepArgumentTransformation(@"scaling\((.*), (.*), (.*)\)")]
-    public static Matrix.M4.T ToScaling(double x, double y, double z) => Geometry.Transformation.scaling(x, y, z);
+    public static Matrix.M4.T ToScaling(double x, double y, double z) => Geometry.Transformation.scalingOf(x, y, z);
 
     [StepArgumentTransformation(@"shearing\((.*), (.*), (.*), (.*), (.*), (.*)\)")]
-    public static Matrix.M4.T ToShearing(double xy, double xz, double yx, double yz, double zx, double zy) => Geometry.Transformation.shearing(xy, xz, yx, yz, zx, zy);
+    public static Matrix.M4.T ToShearing(double xy, double xz, double yx, double yz, double zx, double zy) => Geometry.Transformation.shearingOf(xy, xz, yx, yz, zx, zy);
 
     [StepArgumentTransformation(@"rotation_x\((.*)\)")]
-    public static Matrix.M4.T ToRotationX(double radians) => Geometry.Transformation.rotation_x(radians);
+    public static Matrix.M4.T ToRotationX(double radians) => Geometry.Transformation.rotationXOf(radians);
 
     [StepArgumentTransformation(@"rotation_y\((.*)\)")]
-    public static Matrix.M4.T ToRotationY(double radians) => Geometry.Transformation.rotation_y(radians);
+    public static Matrix.M4.T ToRotationY(double radians) => Geometry.Transformation.rotationYOf(radians);
 
     [StepArgumentTransformation(@"rotation_z\((.*)\)")]
-    public static Matrix.M4.T ToRotationZ(double radians) => Geometry.Transformation.rotation_z(radians);
+    public static Matrix.M4.T ToRotationZ(double radians) => Geometry.Transformation.rotationZOf(radians);
 
     [StepArgumentTransformation(@"(π / \d|π/\d|\-?√\d/\d|√\d+)")]
-    public static double ToDouble(string arg) => Parser.parseFloat(arg);
+    public static double ToDouble(string arg) => IO.Parser.floatFrom(arg);
 
     [Given(@"^(transform|C|m|t) ← (translation.*)$")]
     [Given(@"^(transform|B|m) ← (scaling\([^)]*\))$")]
@@ -121,7 +121,7 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
         var to = Tuple[toKey];
         var up = Tuple[upKey];
 
-        var t = Geometry.Transformation.view(from, to, up);
+        var t = Geometry.Transformation.viewOf(from, to, up);
         Transformation[key] = t;
     }
 

@@ -19,7 +19,7 @@ let add_shape world shape =
 
 let intersect world ray =
     world.objects
-    |> Seq.collect (fun shape -> Geometry.Intersection.intersect shape ray)
+    |> Seq.collect (fun shape -> Geometry.Intersection.intersectionsOf shape ray)
     |> Geometry.Intersection.sort
     |> Array.ofSeq
 
@@ -30,18 +30,18 @@ let in_shadow world point =
     let r = Geometry.Ray.create point direction
     let xs = intersect world r
 
-    match Geometry.Intersection.hit xs with
+    match Geometry.Intersection.hitFrom xs with
     | Some h -> h.t < distance
     | _ -> false
 
 let shade world (comps: Geometry.Intersection.Comps.T) =
     let s = in_shadow world comps.over
     let m = comps.object.material
-    Graphics.Material.lightning m world.lights[0] comps.point comps.eye comps.normal s
+    Graphics.Material.lightningFrom m world.lights[0] comps.point comps.eye comps.normal s
 
 let color world ray =
     let xs = intersect world ray
 
-    match Geometry.Intersection.hit xs with
+    match Geometry.Intersection.hitFrom xs with
     | None -> Graphics.Color.black
-    | Some i -> Geometry.Intersection.prepare i ray |> shade world
+    | Some i -> Geometry.Intersection.compsFrom i ray |> shade world

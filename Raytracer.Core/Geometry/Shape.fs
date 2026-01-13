@@ -24,9 +24,9 @@ let create transform material intersect normal =
       intersect = intersect
       normal = normal }
 
-let sphere transform material =
+let sphereOf transform material =
     let intersect (ray: Ray.T) =
-        let str = ray.origin - Tuple.point 0. 0. 0.
+        let str = ray.origin - Tuple.origin
         let a = Tuple.dot ray.direction ray.direction
         let b = 2. * Tuple.dot ray.direction str
         let c = Tuple.dot str str - 1.0
@@ -45,28 +45,28 @@ let sphere transform material =
 
     create transform material intersect normal
 
-let test transform material (save_ray: System.Action<Ray.T>) =
+let testOf transform material (save_ray: System.Action<Ray.T>) =
     let intersect ray =
         save_ray.Invoke ray
         Seq.empty
 
-    create transform material intersect Tuple.to_vector
+    create transform material intersect Tuple.vectorFrom
 
-let plane transform material =
-    let n = Tuple.vector 0 1 0
+let planeOf transform material =
+    let n = Tuple.vectorOf 0 1 0
 
     let intersect (ray: Ray.T) =
-        if abs ray.direction.y < Raytracer.Library.epsilon then
+        if abs ray.direction.y < epsilon then
             Seq.empty
         else
             Seq.singleton (-ray.origin.y / ray.direction.y)
 
     create transform material intersect (fun _ -> n)
 
-let normalAt shape point =
+let normalFrom shape point =
     let inverse = Transformation.inverse shape.transform
     let local_point = inverse * point
     let local_normal = shape.normal local_point
     let world_normal = Transformation.transpose inverse * local_normal
 
-    world_normal |> Tuple.to_vector |> Tuple.normalize
+    world_normal |> Tuple.vectorFrom |> Tuple.normalize

@@ -8,13 +8,13 @@ namespace Raytracer.Tests.Steps;
 public class TupleSteps(ScenarioContext ctx) : StepsBase(ctx)
 {
     [StepArgumentTransformation(@"tuple\((.*), (.*), (.*), (.*)\)")]
-    public static Tuple ToTuple(double x, double y, double z, double w) => Math.Tuple.tuple(x, y, z, w);
+    public static Tuple ToTuple(double x, double y, double z, double w) => Math.Tuple.tupleOf(x, y, z, w);
 
     [StepArgumentTransformation(@"point\((.*), (.*), (.*)\)")]
-    public static Tuple ToPoint(double x, double y, double z) => Math.Tuple.point(x, y, z);
+    public static Tuple ToPoint(double x, double y, double z) => Math.Tuple.pointOf(x, y, z);
 
     [StepArgumentTransformation(@"vector\((.*), (.*), (.*)\)")]
-    public static Tuple ToVector(double x, double y, double z) => Math.Tuple.vector(x, y, z);
+    public static Tuple ToVector(double x, double y, double z) => Math.Tuple.vectorOf(x, y, z);
 
     [Given(@"^(a|a1|a2|b) ← (tuple.*)$")]
     [Given(@"^(p|p1|p2) ← (point.*)$")]

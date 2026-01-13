@@ -1,7 +1,5 @@
 module Raytracer.Math.Tuple
 
-open Raytracer.Library
-
 [<Struct; NoComparison; CustomEquality>]
 type T =
     { x: float
@@ -51,11 +49,11 @@ type T =
           w = -r.w }
 
 
-let tuple x y z w = { x = x; y = y; w = w; z = z }
-let vector x y z = tuple x y z 0.0
-let point x y z = tuple x y z 1.0
+let tupleOf x y z w = { x = x; y = y; w = w; z = z }
+let vectorOf x y z = tupleOf x y z 0.0
+let pointOf x y z = tupleOf x y z 1.0
 
-let to_vector t = vector t.x t.y t.z 
+let vectorFrom t = vectorOf t.x t.y t.z 
 
 let magnitude this =
     sqrt (this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w)
@@ -68,7 +66,6 @@ let normalize this =
       z = this.z / magnitude
       w = this.w / magnitude }
 
-
 let dot this other =
     this.x * other.x + this.y * other.y + this.z * other.z + this.w * other.w
 
@@ -80,4 +77,4 @@ let cross this other =
 
 let reflect v n = v - n * 2. * dot v n
 
-let origin = point 0. 0. 0.
+let origin = pointOf 0. 0. 0.

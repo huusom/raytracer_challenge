@@ -73,7 +73,7 @@ public class CanvasSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void CanvasToPpm(string canvasKey)
     {
         var canvas = Canvas[canvasKey];
-        this.ppm = Graphics.Canvas.toPortablePixmap(canvas);
+        this.ppm = Graphics.Canvas.portablePixmapOf(canvas);
     }
 
     [Then(@"^lines (\d+)-(\d+) of ppm are$")]

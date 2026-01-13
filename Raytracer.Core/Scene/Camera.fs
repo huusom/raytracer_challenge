@@ -21,7 +21,7 @@ let create hsize vsize fov pixel_size half_width half_height transform =
       half_height = half_height
       transform = transform }
 
-let init hsize vsize fov =
+let cameraOf hsize vsize fov =
     let half_view = tan (fov / 2.)
     let aspect = float hsize / float vsize
 
@@ -35,7 +35,7 @@ let init hsize vsize fov =
 
     create hsize vsize fov pixel_size half_width half_height Transformation.identity
 
-let ray camera x y = 
+let rayFor camera x y = 
     let xoffset = (float x + 0.5) * camera.pixel_size 
     let yoffset = (float y + 0.5) * camera.pixel_size
 
@@ -43,8 +43,8 @@ let ray camera x y =
     let worldy = camera.half_height - yoffset 
 
     let i = Transformation.inverse camera.transform
-    let pixel = i * Tuple.point worldx worldy -1 
-    let origin = i * Tuple.point 0 0 0 
+    let pixel = i * Tuple.pointOf worldx worldy -1 
+    let origin = i * Tuple.origin
     let direction = Tuple.normalize(pixel - origin)
 
     Ray.create origin direction 
@@ -53,7 +53,7 @@ let render camera world =
     let image = Raytracer.Graphics.Canvas.create camera.hsize camera.vsize 
     for y in 0.. (camera.vsize - 1) do 
         for x in 0..(camera.hsize - 1) do 
-            let r = ray camera x y 
+            let r = rayFor camera x y 
             let c = World.color world r 
             image[x,y] <- c 
 

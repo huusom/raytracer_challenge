@@ -32,7 +32,7 @@ let create color ambient diffuse specular shininess =
       specular = specular
       shininess = shininess }
 
-let lightning material (light: Light.T) point eyev normalv shadow =
+let lightningFrom material (light: Light.T) point eyev normalv shadow =
     let effective_color = material.color * light.intensity
     let lightv = light.position - point |> Tuple.normalize
     let ambient = effective_color * material.ambient

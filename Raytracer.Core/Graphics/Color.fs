@@ -1,6 +1,6 @@
 module Raytracer.Graphics.Color
 
-open Raytracer.Library
+open Raytracer.Math.Comparison
 
 [<Struct; CustomEquality; NoComparison>]
 type T =
@@ -41,7 +41,7 @@ let black = { r = 0.0; g = 0.0; b = 0.0 }
 
 let white = { r = 1.0; g = 1.0; b = 1.0 }
 
-let toInt (t: T) =
+let intsFrom (t: T) =
     let clamp x = x * 256.0 |> int |> min 255 |> max 0
 
     [ clamp t.r; clamp t.g; clamp t.b ]

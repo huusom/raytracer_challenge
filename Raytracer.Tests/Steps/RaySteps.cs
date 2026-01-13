@@ -49,7 +49,7 @@ public class RaySteps(ScenarioContext ctx) : StepsBase(ctx)
     public void ThenPositionShouldBe(string rayKey, double distance, Tuple expected)
     {
         var r = Ray[rayKey];
-        var actual = Geometry.Ray.position(r, distance);
+        var actual = Geometry.Ray.positionFrom(r, distance);
         actual.ShouldBe(expected);
     }
 
@@ -59,7 +59,7 @@ public class RaySteps(ScenarioContext ctx) : StepsBase(ctx)
         var r = Ray[rayKey];
         var m = Transformation[transformKey];
 
-        Ray[key] = Geometry.Ray.transform(r, m);
+        Ray[key] = Geometry.Ray.transformationOf(r, m);
     }
 
     [Then(@"^(r|r2)\.origin = (point.*)$")]

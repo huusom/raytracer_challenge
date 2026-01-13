@@ -58,7 +58,7 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void WhenCalculatingHit(string key, string xsKey)
     {
         var xs = XS[xsKey];
-        var i = Geometry.Intersection.hit(xs);
+        var i = Geometry.Intersection.hitFrom(xs);
         if (i is not null)
             I[key] = i.Value;
     }
@@ -83,7 +83,7 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var s = Shape[shapeKey];
         var r = Ray[rayKey];
-        var xs = Geometry.Intersection.intersect(s, r);
+        var xs = Geometry.Intersection.intersectionsOf(s, r);
 
         XS[intersectKey] = xs;
     }
@@ -141,7 +141,7 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
         var i = I[intersectKey];
         var r = Ray[rayKey];
 
-        var c = Raytracer.Geometry.Intersection.prepare(i, r);
+        var c = Raytracer.Geometry.Intersection.compsFrom(i, r);
         Comps[key] = c;
     }
 
@@ -200,7 +200,7 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void ThenCompsOverZShouldBe(string key)
     {
         var comps = Comps[key];
-        comps.over.z.ShouldBeLessThan(-Library.epsilon / 2);
+        comps.over.z.ShouldBeLessThan(-Math.Comparison.epsilon / 2);
     }
 
     [Then(@"^(comps)\.point\.z > comps\.over_point\.z$")]

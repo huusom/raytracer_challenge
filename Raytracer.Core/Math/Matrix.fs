@@ -88,8 +88,6 @@ module M3 =
         m.m11 * (cofactor m 0 0) + m.m12 * (cofactor m 0 1) + m.m13 * (cofactor m 0 2)
 
 module M4 =
-    open Raytracer.Library
-
     [<CustomEquality; NoComparison>]
     type T =
         { m11: float
@@ -195,7 +193,7 @@ module M4 =
               m44 = l.m41 * r.m14 + l.m42 * r.m24 + l.m43 * r.m34 + l.m44 * r.m44 }
 
         static member (*)(l, r: Tuple.T) =
-            Tuple.tuple
+            Tuple.tupleOf
                 (l.m11 * r.x + l.m12 * r.y + l.m13 * r.z + l.m14 * r.w)
                 (l.m21 * r.x + l.m22 * r.y + l.m23 * r.z + l.m24 * r.w)
                 (l.m31 * r.x + l.m32 * r.y + l.m33 * r.z + l.m34 * r.w)
