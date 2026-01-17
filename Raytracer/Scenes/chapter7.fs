@@ -1,8 +1,10 @@
-module Raytracer.Chapter7
+module Raytracer.Scenes.Chapter7
 
-open Geometry.Transformation
+open Raytracer
+open Raytracer.Geometry.Transformation
 
-let run () =
+let name = "chapter7"
+let render (camera : Scene.Camera.T) =
     let radians r = System.Math.PI / r
 
     let ambient = 0.1
@@ -56,8 +58,7 @@ let run () =
     let world =
         Scene.World.create [ floor; left_wall; right_wall; middle; right; left ] [ light ]
 
-    let camera = Scene.Camera.cameraOf 200 100 (System.Math.PI / 3.)
-
     camera.transform <- viewOf (Math.Tuple.pointOf 0 1.5 -5) (Math.Tuple.pointOf 0 1 0) (Math.Tuple.vectorOf 0 1 0)
 
     world |> Scene.Camera.render camera
+

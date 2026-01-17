@@ -26,7 +26,9 @@ type T = { t: float; object: Shape.T }
 
 let create object t = { t = t; object = object }
 
-let sort xs = xs |> Seq.sortBy (fun i -> i.t)
+let sort xs = 
+    Array.sortInPlaceBy (fun i -> i.t) xs 
+    xs 
 
 let intersectionsOf shape ray =
     let r = Ray.transformationOf ray shape.transform.inverse.Value

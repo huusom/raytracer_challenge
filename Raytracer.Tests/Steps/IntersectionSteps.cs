@@ -1,3 +1,4 @@
+using Raytracer.Geometry;
 using Reqnroll;
 using Shouldly;
 using System;
@@ -39,8 +40,9 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var i1 = I[key1];
         var i2 = I[key2];
+        
 
-        XS[xsKey] = [i1, i2];
+        XS[xsKey] = Intersection.sort ([i1, i2]);
     }
 
     [Given(@"^(xs) ← intersections\((i1), (i2), (i3), (i4)\)$")]
@@ -51,7 +53,7 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
         var i3 = I[key3];
         var i4 = I[key4];
 
-        XS[xsKey] = [i1, i2, i3, i4];
+        XS[xsKey] = Intersection.sort ([i1, i2, i3, i4]);
     }
 
     [When(@"^(i) ← hit\((xs)\)$")]

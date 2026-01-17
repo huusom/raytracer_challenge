@@ -135,11 +135,9 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     }
 
     [Then(@"^(t) is the following \dx\d matrix:$")]
-    public void ThenTransformationEqualityShouldBe(string key, Transformation.T expected)
+    public void ThenTransformationEqualityShouldBe(string key, Matrix.M4.T expected)
     {
         var actual = Transformation[key];
-        actual.ShouldBe(expected);
+        actual.source.ShouldBe(expected);
     }
-
-
 }

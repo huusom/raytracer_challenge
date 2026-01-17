@@ -1,13 +1,16 @@
-module Raytracer.Chapter5
+module Raytracer.Scenes.Chapter5
 
 open Raytracer.Math
 open Raytracer.Graphics
+open Raytracer
 
-let run () =
+let name = "chapter5"
+
+let render (camera: Scene.Camera.T) =
     let ray_origin = Tuple.pointOf 0 0 -5
     let wall_z = 10
     let wall_size = 7
-    let canvas_pixels = 100
+    let canvas_pixels = camera.hsize
     let pixel_size = (float wall_size) / (float canvas_pixels)
     let half = (float wall_size) / 2.
     let canvas = Canvas.create canvas_pixels canvas_pixels
