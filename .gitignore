@@ -24,3 +24,8 @@ packages/
 # Configuration
 .config/
 .fake
+raytracer-optimized-trace.etlx
+raytracer-optimized-trace
+raytracer-current-trace.etlx
+raytracer-current-trace
+out.ppm

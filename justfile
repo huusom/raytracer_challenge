@@ -11,10 +11,15 @@ setup:
 	dotnet tool install dotnet-format
 	dotnet tool install fantomas 
 	dotnet tool install dotnet-outdated-tool
+	dotnet tool install dotnet-trace
 	dotnet new install Reqnroll.Templates.DotNet
 
 	echo "Setup complete!"
 
+
+# run the cli
+run:
+	dotnet run --project ./Raytracer/Raytracer.fsproj 
 
 # Build the project
 build:

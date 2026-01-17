@@ -71,7 +71,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void GivenPointLight(string key, Math.Tuple.T position, Graphics.Color.T intensity)
     {
         var w = World[key];
-        var l = Graphics.Light.pointLightOf(position, intensity);
+        var l = Scene.Light.pointLightOf(position, intensity);
 
         World[key] = Scene.World.create(w.objects, [l]);
     }
@@ -82,7 +82,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var w = World[worldKey];
         var comps = Comps[compsKey];
-        var c = Scene.World.shade(w, comps);
+        var c = Scene.World.lightningFrom(w, comps);
 
         Color[key] = c;
     }
@@ -93,7 +93,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
         var w = World[worldKey];
         var r = Ray[rayKey];
 
-        var c = Scene.World.color(w, r);
+        var c = Scene.World.colorFrom(w, r);
 
         Color[key] = c;
     }
@@ -104,7 +104,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
         var w = World[worldKey];
         var p = Tuple[pointKey];
 
-        var actual = Scene.World.in_shadow(w, p);
+        var actual = Scene.World.shadowFrom(w, p);
         actual.ShouldBe(expected);
     }
 
@@ -114,7 +114,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
         var s = Shape[shapeKey];
         var w = World[key];
 
-        World[key] = Scene.World.add_shape(w, s);
+        World[key] = Scene.World.appendShape(w, s);
     }
 
 }

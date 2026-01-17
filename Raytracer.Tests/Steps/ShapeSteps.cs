@@ -38,7 +38,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var s = Shape[key];
         var actual = s.transform;
-        actual.ShouldBe(Math.Matrix.M4.identity);
+        actual.ShouldBe(Geometry.Transformation.identity);
     }
 
     [Given(@"^set_transform\((s), (m)\)$")]
@@ -65,14 +65,14 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
     [When(@"^set_transform\((s), (scaling.*)\)$")]
     [When(@"^set_transform\((s), (translation.*)\)$")]
     [Given(@"^set_transform\((s), (translation.*)\)$")]
-    public void WhenSetTransform(string shapeKey, Math.Matrix.M4.T transform)
+    public void WhenSetTransform(string shapeKey, Transformation.T transform)
     {
         var s = Shape[shapeKey];
         s.transform = transform;
     }
 
     [Then(@"^(s)\.transform = (translation.*)$")]
-    public void ThenTransformShouldBe(string shapeKey, Math.Matrix.M4.T expected)
+    public void ThenTransformShouldBe(string shapeKey, Transformation.T expected)
     {
         var s = Shape[shapeKey];
         var actual = s.transform;
@@ -168,7 +168,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var p = Shape[planeKey];
         var r = Ray[rayKey];
-        XS[key] = Intersection.intersectionsOf(p, r);
+        XS[key] = [.. Intersection.intersectionsOf(p, r).OrderBy( i => i.t)];
     }
 }
 

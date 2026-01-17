@@ -29,14 +29,12 @@ let create object t = { t = t; object = object }
 let sort xs = xs |> Seq.sortBy (fun i -> i.t)
 
 let intersectionsOf shape ray =
-    let r = shape.transform |> Transformation.inverse |> Ray.transformationOf ray
-
-    shape.intersect r
-    |> Seq.map (create shape)
-    |> Array.ofSeq
+    let r = Ray.transformationOf ray shape.transform.inverse.Value
+    shape.intersect r |> Seq.map (create shape) 
+    
 
 let hitFrom xs =
-    xs |> sort |> Seq.skipWhile (fun i -> i.t < 0.) |> Seq.tryHead
+    xs |> Seq.tryFind (fun i -> i.t > 0)
 
 let compsFrom i ray =
     let point = Ray.positionFrom ray i.t

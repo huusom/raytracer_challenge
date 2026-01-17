@@ -59,7 +59,7 @@ public class RaySteps(ScenarioContext ctx) : StepsBase(ctx)
         var r = Ray[rayKey];
         var m = Transformation[transformKey];
 
-        Ray[key] = Geometry.Ray.transformationOf(r, m);
+        Ray[key] = Geometry.Ray.transformationOf(r, m.source);
     }
 
     [Then(@"^(r|r2)\.origin = (point.*)$")]

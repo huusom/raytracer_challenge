@@ -1,7 +1,9 @@
 module Raytracer.Scene.Camera
 
+open FSharp.Collections.ParallelSeq
 open Raytracer.Math
 open Raytracer.Geometry
+open Raytracer.Graphics
 
 type T =
     { hsize: int
@@ -10,7 +12,7 @@ type T =
       pixel_size: float
       half_width: float
       half_height: float
-      mutable transform: Matrix.M4.T }
+      mutable transform: Transformation.T }
 
 let create hsize vsize fov pixel_size half_width half_height transform =
     { hsize = hsize
@@ -35,26 +37,29 @@ let cameraOf hsize vsize fov =
 
     create hsize vsize fov pixel_size half_width half_height Transformation.identity
 
-let rayFor camera x y = 
-    let xoffset = (float x + 0.5) * camera.pixel_size 
+let rayFor camera x y =
+    let xoffset = (float x + 0.5) * camera.pixel_size
     let yoffset = (float y + 0.5) * camera.pixel_size
 
     let worldx = camera.half_width - xoffset
-    let worldy = camera.half_height - yoffset 
+    let worldy = camera.half_height - yoffset
 
-    let i = Transformation.inverse camera.transform
-    let pixel = i * Tuple.pointOf worldx worldy -1 
+    let i = camera.transform.inverse.Value
+    let pixel = i * Tuple.pointOf worldx worldy -1
     let origin = i * Tuple.origin
-    let direction = Tuple.normalize(pixel - origin)
+    let direction = Tuple.normalize (pixel - origin)
 
-    Ray.create origin direction 
+    Ray.create origin direction
 
-let render camera world = 
-    let image = Raytracer.Graphics.Canvas.create camera.hsize camera.vsize 
-    for y in 0.. (camera.vsize - 1) do 
-        for x in 0..(camera.hsize - 1) do 
-            let r = rayFor camera x y 
-            let c = World.color world r 
-            image[x,y] <- c 
+let render camera world =
+    let image = Canvas.create camera.hsize camera.vsize
+
+    let color (x,y) = 
+        let r = rayFor camera x y 
+        let c = World.colorFrom world r 
+        image[x,y] <- c 
+
+    Canvas.coordsOf image 
+    |> PSeq.iter color
 
     image

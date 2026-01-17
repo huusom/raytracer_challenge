@@ -1,9 +1,9 @@
-module Raytracer.Graphics.Light
+module Raytracer.Scene.Light
 
 [<Struct>]
 type T =
     { position: Raytracer.Math.Tuple.T
-      intensity: Color.T }
+      intensity: Raytracer.Graphics.Color.T }
 
 let create position intensity =
     { position = position

@@ -2,6 +2,7 @@ using Reqnroll;
 using Shouldly;
 using Raytracer.Math;
 using System.Linq;
+using Raytracer.Geometry;
 
 namespace Raytracer.Tests.Steps;
 
@@ -16,22 +17,22 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     }
 
     [StepArgumentTransformation(@"translation\((.*), (.*), (.*)\)")]
-    public static Matrix.M4.T ToTranslation(double x, double y, double z) => Geometry.Transformation.translationOf(x, y, z);
+    public static Transformation.T ToTranslation(double x, double y, double z) => Geometry.Transformation.translationOf(x, y, z);
 
     [StepArgumentTransformation(@"scaling\((.*), (.*), (.*)\)")]
-    public static Matrix.M4.T ToScaling(double x, double y, double z) => Geometry.Transformation.scalingOf(x, y, z);
+    public static Transformation.T ToScaling(double x, double y, double z) => Geometry.Transformation.scalingOf(x, y, z);
 
     [StepArgumentTransformation(@"shearing\((.*), (.*), (.*), (.*), (.*), (.*)\)")]
-    public static Matrix.M4.T ToShearing(double xy, double xz, double yx, double yz, double zx, double zy) => Geometry.Transformation.shearingOf(xy, xz, yx, yz, zx, zy);
+    public static Transformation.T ToShearing(double xy, double xz, double yx, double yz, double zx, double zy) => Geometry.Transformation.shearingOf(xy, xz, yx, yz, zx, zy);
 
     [StepArgumentTransformation(@"rotation_x\((.*)\)")]
-    public static Matrix.M4.T ToRotationX(double radians) => Geometry.Transformation.rotationXOf(radians);
+    public static Transformation.T ToRotationX(double radians) => Geometry.Transformation.rotationXOf(radians);
 
     [StepArgumentTransformation(@"rotation_y\((.*)\)")]
-    public static Matrix.M4.T ToRotationY(double radians) => Geometry.Transformation.rotationYOf(radians);
+    public static Transformation.T ToRotationY(double radians) => Geometry.Transformation.rotationYOf(radians);
 
     [StepArgumentTransformation(@"rotation_z\((.*)\)")]
-    public static Matrix.M4.T ToRotationZ(double radians) => Geometry.Transformation.rotationZOf(radians);
+    public static Transformation.T ToRotationZ(double radians) => Geometry.Transformation.rotationZOf(radians);
 
     [StepArgumentTransformation(@"(π / \d|π/\d|\-?√\d/\d|√\d+)")]
     public static double ToDouble(string arg) => IO.Parser.floatFrom(arg);
@@ -42,15 +43,17 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     [Given(@"(half_quarter|full_quarter|A) ← (rotation_x.*)")]
     [Given(@"(half_quarter|full_quarter) ← (rotation_y.*)")]
     [Given(@"(half_quarter|full_quarter) ← (rotation_z.*)")]
-    public void GivenTranslation(string transformationKey, Matrix.M4.T translation)
+    public void GivenTranslation(string transformationKey, Transformation.T translation)
     {
         Transformation[transformationKey] = translation;
     }
 
     [Given(@"^(inv) ← inverse\((transform|half_quarter)\)$")]
-    public void GivenInverseTransformation(string transformKey1, string transformKey2)
+    public void GivenInverseTransformation(string key, string targetKey)
     {
-        Transformation[transformKey1] = Math.Matrix.M4.inverse(Transformation[transformKey2]);
+        var target = Transformation[targetKey];
+
+        Transformation[key] = Geometry.Transformation.init(target.inverse.Value);
     }
 
     [Then(@"^(transform|inv|half_quarter|full_quarter|T) \* (p) = (point.*)$")]
@@ -59,7 +62,7 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var t = Transformation[transformationKey];
         var p = Tuple[tupleKey];
-        var actual = t * p;
+        var actual = t.source * p;
 
         actual.ShouldBe(expected);
     }
@@ -69,7 +72,7 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var t = Transformation[transformationKey];
         var p = Tuple[tupleKey];
-        var actual = t * p;
+        var actual = t.source * p;
         var expected = Tuple[expectedKey];
 
         actual.ShouldBe(expected);
@@ -80,7 +83,7 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var t = Transformation[transformKey];
         var p = Tuple[tupleKey2];
-        Tuple[tupleKey1] = t * p;
+        Tuple[tupleKey1] = t.source * p;
     }
 
     [When(@"^T ← C \* B \* A$")]
@@ -101,14 +104,14 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     }
 
     [Given(@"^(m) ← (scaling.*) \* (rotation_z.*)$")]
-    public void GivenTransformationAsProduct(string key, Matrix.M4.T scaling, Matrix.M4.T rotation)
+    public void GivenTransformationAsProduct(string key, Transformation.T scaling, Transformation.T rotation)
     {
         Transformation[key] = scaling * rotation;
     }
 
     [Then(@"^(t) = (scaling.*)$")]
     [Then(@"^(t) = (translation.*)$")]
-    public void ThenTransformShouldBe(string key, Matrix.M4.T expected)
+    public void ThenTransformShouldBe(string key, Transformation.T expected)
     {
         var actual = Transformation[key];
         actual.ShouldBe(expected);
@@ -128,11 +131,11 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     [Then(@"^(t) = identity_matrix$")]
     public void ThenTransformationShouldBeIdentityMatrix(string key)
     {
-        Transformation[key].ShouldBe(Math.Matrix.M4.identity);
+        Transformation[key].ShouldBe(Geometry.Transformation.identity);
     }
 
     [Then(@"^(t) is the following \dx\d matrix:$")]
-    public void ThenTransformationEqualityShouldBe(string key, Matrix.M4.T expected)
+    public void ThenTransformationEqualityShouldBe(string key, Transformation.T expected)
     {
         var actual = Transformation[key];
         actual.ShouldBe(expected);

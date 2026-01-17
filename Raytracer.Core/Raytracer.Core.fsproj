@@ -8,7 +8,7 @@
     <Compile Include="Math/Tuple.fs" />
     <Compile Include="Math/Matrix.fs" />
     <Compile Include="Graphics/Color.fs" />
-    <Compile Include="Graphics/Light.fs" />
+    <Compile Include="Scene/Light.fs" />
     <Compile Include="Graphics/Material.fs" />
     <Compile Include="Graphics/Canvas.fs" />
     <Compile Include="Geometry/Transformation.fs" />
@@ -18,5 +18,8 @@
     <Compile Include="Scene/World.fs" />
     <Compile Include="Scene/Camera.fs" />   
     <Compile Include="IO/Parser.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.2.0" />
   </ItemGroup>
 </Project>

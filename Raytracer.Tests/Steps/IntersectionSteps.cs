@@ -85,7 +85,7 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
         var r = Ray[rayKey];
         var xs = Geometry.Intersection.intersectionsOf(s, r);
 
-        XS[intersectKey] = xs;
+        XS[intersectKey] = [.. xs.OrderBy( i => i.t)];
     }
 
     [Then(@"^(xs).count = (\d)$")]
@@ -130,7 +130,7 @@ public class IntersectionSteps(ScenarioContext ctx) : StepsBase(ctx)
         var w = World[worldKey];
         var r = Ray[rayKey];
 
-        var xs = Raytracer.Scene.World.intersect(w, r);
+        var xs = Raytracer.Scene.World.intersectionsOf(w, r);
 
         XS[key] = xs.ToArray();
     }

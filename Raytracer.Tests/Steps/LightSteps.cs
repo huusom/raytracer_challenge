@@ -12,14 +12,14 @@ public class LightSteps(ScenarioContext ctx) : StepsBase(ctx)
         var position = Tuple[positionKey];
         var intensity = Color[intensityKey];
 
-        Light[key] = Graphics.Light.pointLightOf(position, intensity);
+        Light[key] = Scene.Light.pointLightOf(position, intensity);
     }
 
     [When(@"^(light) ← point_light\((point.*), (color.*)\)$")]
     [Given(@"^(light) ← point_light\((point.*), (color.*)\)$")]
     public void WhenCreatingPointLight(string key, Math.Tuple.T position, Graphics.Color.T intensity)
     {
-        Light[key] = Graphics.Light.pointLightOf(position, intensity);
+        Light[key] = Scene.Light.pointLightOf(position, intensity);
     }
 
     [Then(@"^(light)\.position = (position)$")]

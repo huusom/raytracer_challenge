@@ -6,13 +6,20 @@ type T =
       p: Color.T array }
 
     member this.Item
-        with get (x, y) = this.p[y * this.h + x]
-        and set (x, y) v = this.p[y * this.h + x] <- v
+        with get (x, y) = this.p[x * this.h + y]
+        and set (x, y) v = this.p[x * this.h + y] <- v
 
 let create w h =
     { w = w
       h = h
       p = Array.create (w * h) Color.black }
+
+let coordsOf canvas =
+    seq {
+        for y in 0 .. (canvas.h - 1) do
+            for x in 0 .. (canvas.w - 1) do
+                x, y
+    }
 
 let portablePixmapOf canvas =
     seq {

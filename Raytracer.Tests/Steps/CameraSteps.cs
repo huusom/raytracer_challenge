@@ -1,5 +1,6 @@
 using Shouldly;
 using Reqnroll;
+using Raytracer.Geometry;
 namespace Raytracer.Tests.Steps;
 
 [Binding]
@@ -77,20 +78,20 @@ public class CameraSteps(ScenarioContext ctx) : StepsBase(ctx)
         c.pixel_size.ShouldBe(expected);
     }
 
-    [When(@"^(r) ← ray_for_pixel\((c), (\d+), (\d+)\)$")] 
+    [When(@"^(r) ← ray_for_pixel\((c), (\d+), (\d+)\)$")]
     public void CreateRayForPixel(string key, string cameraKey, int x, int y)
     {
         var c = Camera[cameraKey];
         var r = Scene.Camera.rayFor(c, x, y);
 
-        Ray[key] = r; 
+        Ray[key] = r;
     }
 
     [When(@"^(c)\.transform ← (rotation_y.*) \* (translation.*)$")]
-    public void WhenSettingTransform(string key, Math.Matrix.M4.T rotation, Math.Matrix.M4.T translation)
+    public void WhenSettingTransform(string key, Transformation.T rotation, Transformation.T translation)
     {
         var c = Camera[key];
-        c.transform = rotation * translation;
+        c.transform = Geometry.Transformation.combine([rotation, translation]);
     }
 
     [Given(@"^(c).transform ← view_transform\(from, to, up\)$")]
@@ -98,7 +99,7 @@ public class CameraSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var t = Geometry.Transformation.viewOf(Tuple["from"], Tuple["to"], Tuple["up"]);
         var c = Camera[key];
-        c.transform = t; 
+        c.transform = t;
     }
 
     [When(@"^(image) ← render\((c), (w)\)")]

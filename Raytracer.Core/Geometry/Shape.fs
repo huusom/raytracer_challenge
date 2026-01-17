@@ -6,7 +6,7 @@ open Raytracer.Graphics
 
 [<CustomEquality; NoComparison>]
 type T =
-    { mutable transform: M4.T
+    { mutable transform: Transformation.T
       mutable material: Material.T
       intersect: Ray.T -> seq<float>
       normal: Tuple.T -> Tuple.T }
@@ -64,9 +64,8 @@ let planeOf transform material =
     create transform material intersect (fun _ -> n)
 
 let normalFrom shape point =
-    let inverse = Transformation.inverse shape.transform
-    let local_point = inverse * point
+    let local_point = shape.transform.inverse.Value * point
     let local_normal = shape.normal local_point
-    let world_normal = Transformation.transpose inverse * local_normal
+    let world_normal = M4.transpose shape.transform.inverse.Value * local_normal
 
     world_normal |> Tuple.vectorFrom |> Tuple.normalize

@@ -2,7 +2,7 @@ module Raytracer.Graphics.Material
 
 open Raytracer.Graphics
 open Raytracer.Math
-open Raytracer
+open Raytracer.Scene
 
 [<CustomEquality; NoComparison>]
 type T =
@@ -25,7 +25,7 @@ type T =
     override this.GetHashCode() : int =
         hash (this.color, this.ambient, this.diffuse, this.specular, this.shininess)
 
-let create color ambient diffuse specular shininess =
+let create ambient diffuse specular shininess color =
     { color = color
       ambient = ambient
       diffuse = diffuse
