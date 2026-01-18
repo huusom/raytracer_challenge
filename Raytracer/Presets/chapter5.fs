@@ -1,4 +1,4 @@
-module Raytracer.Scenes.Chapter5
+module Raytracer.Presets.Chapter5
 
 open Raytracer.Math
 open Raytracer.Graphics

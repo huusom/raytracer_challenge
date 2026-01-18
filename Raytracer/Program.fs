@@ -1,7 +1,7 @@
 ﻿open Raytracer.Graphics
 open Raytracer.IO.Parser
 open Raytracer.Scene
-open Raytracer.Scenes
+open Raytracer.Presets
 open Microsoft.Extensions.Configuration
 
 [<CLIMutable>]
@@ -34,7 +34,7 @@ let main args =
     let options = root.Get<Options>()
 
     let scenes =
-        [ Chapter5.name, Chapter5.render; Chapter6.name, Chapter6.render ; Chapter7.name, Chapter7.render ] |> Map.ofList
+        [ Chapter5.name, Chapter5.render; Chapter6.name, Chapter6.render ; Chapter7.name, Chapter7.render; Chapter9.name, Chapter9.render ] |> Map.ofList
 
     match arg0 with
     | _ when Map.containsKey arg0 scenes -> render options scenes[arg0]

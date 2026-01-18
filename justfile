@@ -1,5 +1,9 @@
 # Justfile for Raytracer Challenge
 
+# Default target
+default:
+	@just -l
+
 # Setup the development environment
 setup:
 	echo "Setting up development environment..."
@@ -18,8 +22,8 @@ setup:
 
 
 # run the cli
-run:
-	dotnet run --project ./Raytracer/Raytracer.fsproj 
+run PRESET="chapter9" OUT="out.ppm":
+	dotnet run --project ./Raytracer/Raytracer.fsproj -- "{{PRESET}}" --out "{{OUT}}"
 
 # Build the project
 build:
@@ -37,6 +41,3 @@ format:
 test:
 	dotnet test
 
-# Default target
-default:
-	just build

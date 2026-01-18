@@ -1,4 +1,4 @@
-module Raytracer.Scenes.Chapter7
+module Raytracer.Presets.Chapter7
 
 open Raytracer
 open Raytracer.Geometry.Transformation

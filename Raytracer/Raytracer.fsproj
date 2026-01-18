@@ -5,9 +5,10 @@
   </PropertyGroup>
   <ItemGroup>
     
-    <Compile Include="Scenes/chapter5.fs" />
-    <Compile Include="Scenes/chapter6.fs" />
-    <Compile Include="Scenes/chapter7.fs" />
+    <Compile Include="Presets/chapter5.fs" />
+    <Compile Include="Presets/chapter6.fs" />
+    <Compile Include="Presets/chapter7.fs" />
+    <Compile Include="Presets/chapter9.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
