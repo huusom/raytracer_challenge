@@ -1,9 +1,9 @@
-module Raytracer.Presets.Chapter9
+module Raytracer.Presets.Chapter10
 
 open Raytracer
 open Raytracer.Math.Transformation
 
-let name = "chapter9"
+let name = "chapter10"
 let render (camera : Scene.Camera.T) =
     let radians r = System.Math.PI / r
 
@@ -14,7 +14,7 @@ let render (camera : Scene.Camera.T) =
 
     let floor =
         Graphics.Color.white
-        |> Graphics.Material.create ambient diffuse specular shininess None
+        |> Graphics.Material.create ambient diffuse specular shininess (Some (Graphics.Pattern.checkerOf Graphics.Color.white Graphics.Color.black))
         |> Geometry.Shape.planeOf identity 
 
     let middle =
@@ -29,7 +29,7 @@ let render (camera : Scene.Camera.T) =
 
     let left =
         Graphics.Color.create 1 0.8 0.1
-        |> Graphics.Material.create ambient 0.7 0.3 shininess None
+        |> Graphics.Material.create ambient 0.7 0.3 shininess None 
         |> Geometry.Shape.sphereOf (combine [ translationOf -1.5 0.33 -0.75; scalingOf 0.33 0.33 0.33 ])
 
     let light =

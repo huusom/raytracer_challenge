@@ -7,14 +7,15 @@
     <Compile Include="Math/Comparison.fs" />
     <Compile Include="Math/Tuple.fs" />
     <Compile Include="Math/Matrix.fs" />
+    <Compile Include="Math/Transformation.fs" />
     <Compile Include="Graphics/Color.fs" />
-    <Compile Include="Scene/Light.fs" />
+    <Compile Include="Graphics/Pattern.fs" />
     <Compile Include="Graphics/Material.fs" />
     <Compile Include="Graphics/Canvas.fs" />
-    <Compile Include="Geometry/Transformation.fs" />
     <Compile Include="Geometry/Ray.fs" />
     <Compile Include="Geometry/Shape.fs" />
     <Compile Include="Geometry/Intersection.fs" />
+    <Compile Include="Scene/Light.fs" />
     <Compile Include="Scene/World.fs" />
     <Compile Include="Scene/Camera.fs" />   
     <Compile Include="IO/Parser.fs" />

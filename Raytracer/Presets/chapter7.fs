@@ -1,7 +1,7 @@
 module Raytracer.Presets.Chapter7
 
 open Raytracer
-open Raytracer.Geometry.Transformation
+open Raytracer.Math.Transformation
 
 let name = "chapter7"
 let render (camera : Scene.Camera.T) =
@@ -14,11 +14,11 @@ let render (camera : Scene.Camera.T) =
     let color = Graphics.Color.white
 
     let floor =
-        Graphics.Material.create ambient diffuse 0 shininess color
+        Graphics.Material.create ambient diffuse 0 shininess None color 
         |> Geometry.Shape.sphereOf (scalingOf 10 0.01 10)
 
     let left_wall =
-        Graphics.Material.create ambient diffuse specular shininess color
+        Graphics.Material.create ambient diffuse specular shininess None color
         |> Geometry.Shape.sphereOf (
             combine
                 [ translationOf 0 0 5
@@ -28,7 +28,7 @@ let render (camera : Scene.Camera.T) =
         )
 
     let right_wall =
-        Graphics.Material.create ambient diffuse specular shininess color
+        Graphics.Material.create ambient diffuse specular shininess None color
         |> Geometry.Shape.sphereOf (
             combine
                 [ translationOf 0 0 5
@@ -39,17 +39,17 @@ let render (camera : Scene.Camera.T) =
 
     let middle =
         Graphics.Color.create 0.1 1 0.5
-        |> Graphics.Material.create ambient 0.7 0.3 shininess
+        |> Graphics.Material.create ambient 0.7 0.3 shininess None
         |> Geometry.Shape.sphereOf (translationOf -0.5 1 0.5)
 
     let right =
         Graphics.Color.create 0.5 1 1
-        |> Graphics.Material.create ambient 0.7 0.3 shininess
+        |> Graphics.Material.create ambient 0.7 0.3 shininess None
         |> Geometry.Shape.sphereOf (combine [ translationOf 1.5 0.5 -0.5; scalingOf 0.5 0.5 0.5 ])
 
     let left =
         Graphics.Color.create 1 0.8 0.1
-        |> Graphics.Material.create ambient 0.7 0.3 shininess
+        |> Graphics.Material.create ambient 0.7 0.3 shininess None
         |> Geometry.Shape.sphereOf (combine [ translationOf -1.5 0.33 -0.75; scalingOf 0.33 0.33 0.33 ])
 
     let light =

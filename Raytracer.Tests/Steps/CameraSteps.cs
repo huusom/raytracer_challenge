@@ -1,6 +1,6 @@
 using Shouldly;
 using Reqnroll;
-using Raytracer.Geometry;
+using Raytracer.Math;
 namespace Raytracer.Tests.Steps;
 
 [Binding]
@@ -68,7 +68,7 @@ public class CameraSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void ThenTransformShouldBeIdentityMatrix(string key)
     {
         var c = Camera[key];
-        c.transform.ShouldBe(Raytracer.Geometry.Transformation.identity);
+        c.transform.ShouldBe(Math.Transformation.identity);
     }
 
     [Then(@"^(c)\.pixel_size = (.*)$")]
@@ -91,13 +91,13 @@ public class CameraSteps(ScenarioContext ctx) : StepsBase(ctx)
     public void WhenSettingTransform(string key, Transformation.T rotation, Transformation.T translation)
     {
         var c = Camera[key];
-        c.transform = Geometry.Transformation.combine([rotation, translation]);
+        c.transform = Math.Transformation.combine([rotation, translation]);
     }
 
     [Given(@"^(c).transform ← view_transform\(from, to, up\)$")]
     public void GivenViewTransform(string key)
     {
-        var t = Geometry.Transformation.viewOf(Tuple["from"], Tuple["to"], Tuple["up"]);
+        var t = Math.Transformation.viewOf(Tuple["from"], Tuple["to"], Tuple["up"]);
         var c = Camera[key];
         c.transform = t;
     }

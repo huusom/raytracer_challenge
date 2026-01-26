@@ -11,7 +11,7 @@ public class ColorSteps(ScenarioContext ctx) : StepsBase(ctx)
     [StepArgumentTransformation(@"color\((.*), (.*), (.*)\)")]
     public static Color Create(double r, double g, double b) => Graphics.Color.create(r, g, b);
 
-    [Given(@"^(c|c1|c2|c3|red) ← (color.*)$")]
+    [Given(@"^(c|c1|c2|c3|red|black|white) ← (color.*)$")]
     [Given(@"^(intensity) ← (color.*)$")]
     public void GivenColor(string k, Color color)
     {
@@ -81,5 +81,11 @@ public class ColorSteps(ScenarioContext ctx) : StepsBase(ctx)
         actual.ShouldBe(expected);
     }
 
+    [Then(@"^(c) = (white)$")]
+    public void ThenColorShouldBe(string key, string expectedKey)
+    {
+        var expected = Color[expectedKey];
+        ThenColorShouldBe(key, expected);
+    }
 
 }

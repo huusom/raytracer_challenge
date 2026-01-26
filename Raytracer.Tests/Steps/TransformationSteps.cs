@@ -2,7 +2,6 @@ using Reqnroll;
 using Shouldly;
 using Raytracer.Math;
 using System.Linq;
-using Raytracer.Geometry;
 
 namespace Raytracer.Tests.Steps;
 
@@ -17,22 +16,22 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     }
 
     [StepArgumentTransformation(@"translation\((.*), (.*), (.*)\)")]
-    public static Transformation.T ToTranslation(double x, double y, double z) => Geometry.Transformation.translationOf(x, y, z);
+    public static Transformation.T ToTranslation(double x, double y, double z) => Math.Transformation.translationOf(x, y, z);
 
     [StepArgumentTransformation(@"scaling\((.*), (.*), (.*)\)")]
-    public static Transformation.T ToScaling(double x, double y, double z) => Geometry.Transformation.scalingOf(x, y, z);
+    public static Transformation.T ToScaling(double x, double y, double z) => Math.Transformation.scalingOf(x, y, z);
 
     [StepArgumentTransformation(@"shearing\((.*), (.*), (.*), (.*), (.*), (.*)\)")]
-    public static Transformation.T ToShearing(double xy, double xz, double yx, double yz, double zx, double zy) => Geometry.Transformation.shearingOf(xy, xz, yx, yz, zx, zy);
+    public static Transformation.T ToShearing(double xy, double xz, double yx, double yz, double zx, double zy) => Math.Transformation.shearingOf(xy, xz, yx, yz, zx, zy);
 
     [StepArgumentTransformation(@"rotation_x\((.*)\)")]
-    public static Transformation.T ToRotationX(double radians) => Geometry.Transformation.rotationXOf(radians);
+    public static Transformation.T ToRotationX(double radians) => Math.Transformation.rotationXOf(radians);
 
     [StepArgumentTransformation(@"rotation_y\((.*)\)")]
-    public static Transformation.T ToRotationY(double radians) => Geometry.Transformation.rotationYOf(radians);
+    public static Transformation.T ToRotationY(double radians) => Math.Transformation.rotationYOf(radians);
 
     [StepArgumentTransformation(@"rotation_z\((.*)\)")]
-    public static Transformation.T ToRotationZ(double radians) => Geometry.Transformation.rotationZOf(radians);
+    public static Transformation.T ToRotationZ(double radians) => Math.Transformation.rotationZOf(radians);
 
     [StepArgumentTransformation(@"(π / \d|π/\d|\-?√\d/\d|√\d+)")]
     public static double ToDouble(string arg) => IO.Parser.floatFrom(arg);
@@ -53,7 +52,7 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var target = Transformation[targetKey];
 
-        Transformation[key] = Geometry.Transformation.init(target.inverse.Value);
+        Transformation[key] = Math.Transformation.init(target.inverse.Value);
     }
 
     [Then(@"^(transform|inv|half_quarter|full_quarter|T) \* (p) = (point.*)$")]
@@ -124,14 +123,14 @@ public class TransformationSteps(ScenarioContext ctx) : StepsBase(ctx)
         var to = Tuple[toKey];
         var up = Tuple[upKey];
 
-        var t = Geometry.Transformation.viewOf(from, to, up);
+        var t = Math.Transformation.viewOf(from, to, up);
         Transformation[key] = t;
     }
 
     [Then(@"^(t) = identity_matrix$")]
     public void ThenTransformationShouldBeIdentityMatrix(string key)
     {
-        Transformation[key].ShouldBe(Geometry.Transformation.identity);
+        Transformation[key].ShouldBe(Math.Transformation.identity);
     }
 
     [Then(@"^(t) is the following \dx\d matrix:$")]

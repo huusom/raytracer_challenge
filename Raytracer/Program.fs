@@ -13,14 +13,14 @@ type Options =
 
 let render (options: Options) (f: Camera.T -> Canvas.T) =
     let fov = floatFrom options.fieldOfView
-    printfn "Render with:" 
+    printfn "Render with:"
     printfn " - size : %i x %i" options.width options.height
     printfn " - fov  : %f (%s)" fov options.fieldOfView
     printfn " - out  : %s" options.out
     let camera = Camera.cameraOf options.width options.height fov
-    let sw = System.Diagnostics.Stopwatch.StartNew ()
+    let sw = System.Diagnostics.Stopwatch.StartNew()
     let ppm = f camera |> Canvas.portablePixmapOf
-    sw.Stop() 
+    sw.Stop()
     printfn " - time : %A" sw.Elapsed
     System.IO.File.WriteAllLines(options.out, ppm)
 
@@ -34,7 +34,12 @@ let main args =
     let options = root.Get<Options>()
 
     let scenes =
-        [ Chapter5.name, Chapter5.render; Chapter6.name, Chapter6.render ; Chapter7.name, Chapter7.render; Chapter9.name, Chapter9.render ] |> Map.ofList
+        [ Chapter5.name, Chapter5.render
+          Chapter6.name, Chapter6.render
+          Chapter7.name, Chapter7.render
+          Chapter9.name, Chapter9.render
+          Chapter10.name, Chapter10.render ]
+        |> Map.ofList
 
     match arg0 with
     | _ when Map.containsKey arg0 scenes -> render options scenes[arg0]

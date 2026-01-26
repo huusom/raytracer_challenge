@@ -4,7 +4,7 @@ open Raytracer
 
 type T =
     { objects: Geometry.Shape.T[]
-      lights: Scene.Light.T[] }
+      lights: Light.T[] }
 
 let create objects lights = { objects = Array.ofSeq objects; lights = Array.ofSeq lights }
 
@@ -22,7 +22,7 @@ let intersectionsOf world ray =
     |> Seq.collect (fun shape -> Geometry.Intersection.intersectionsOf shape ray)
     |> Seq.sortBy(fun i -> i.t)
 
-let shadowFrom world point =
+let inShadow world point =
     let v = world.lights[0].position - point
     let distance = Math.Tuple.magnitude v
     let direction = Math.Tuple.normalize v
@@ -33,13 +33,14 @@ let shadowFrom world point =
     | Some h -> h.t < distance
     | _ -> false
 
-let lightningFrom world (comps: Geometry.Intersection.Comps.T) =
-    let s = shadowFrom world comps.over
-    let m = comps.object.material
-    Graphics.Material.lightningFrom m world.lights[0] comps.point comps.eye comps.normal s
+let colorFrom world (comps: Geometry.Intersection.Comps.T) =
+    let s = inShadow world comps.over
+    Light.colorFrom world.lights[0] comps s 
 
-let colorFrom world ray =
+let trace world ray =
     let xs = intersectionsOf world ray
     match Geometry.Intersection.hitFrom xs with
     | None -> Graphics.Color.black
-    | Some i -> Geometry.Intersection.compsFrom i ray |> lightningFrom world
+    | Some i -> 
+        Geometry.Intersection.compsFrom i ray 
+        |> colorFrom world 

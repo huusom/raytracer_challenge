@@ -2,11 +2,11 @@ module Raytracer.Graphics.Material
 
 open Raytracer.Graphics
 open Raytracer.Math
-open Raytracer.Scene
 
 [<CustomEquality; NoComparison>]
 type T =
     { mutable color: Color.T
+      mutable pattern: Pattern.T option
       mutable ambient: float
       mutable diffuse: float
       mutable specular: float
@@ -25,34 +25,10 @@ type T =
     override this.GetHashCode() : int =
         hash (this.color, this.ambient, this.diffuse, this.specular, this.shininess)
 
-let create ambient diffuse specular shininess color =
+let create ambient diffuse specular shininess pattern color =
     { color = color
+      pattern = pattern
       ambient = ambient
       diffuse = diffuse
       specular = specular
       shininess = shininess }
-
-let lightningFrom material (light: Light.T) point eyev normalv shadow =
-    let effective_color = material.color * light.intensity
-    let lightv = light.position - point |> Tuple.normalize
-    let ambient = effective_color * material.ambient
-
-    if shadow 
-    then ambient 
-    else 
-        let light_dot_normal = Tuple.dot lightv normalv
-
-        if light_dot_normal < 0. then
-            ambient
-        else
-            let diffuse = effective_color * material.diffuse * light_dot_normal
-            let reflectv = Tuple.reflect -lightv normalv
-            let reflect_dot_eye = Tuple.dot reflectv eyev
-
-            if reflect_dot_eye <= 0. then
-                ambient + diffuse
-            else
-                let factor = reflect_dot_eye ** material.shininess
-                let specular = light.intensity * material.specular * factor
-                ambient + diffuse +  specular
-

@@ -56,7 +56,7 @@ let render camera world =
 
     let color (x,y) = 
         let r = rayFor camera x y 
-        let c = World.colorFrom world r 
+        let c = World.trace world r 
         image[x,y] <- c 
 
     Canvas.coordsOf image 

@@ -38,6 +38,7 @@ public class StepsBase(ScenarioContext ctx)
     public readonly Item<Scene.World.T> World = new(ctx);
     public readonly Item<Intersection.Comps.T> Comps = new(ctx);
     public readonly Item<Scene.Camera.T> Camera = new(ctx);
+    public readonly Item<Graphics.Pattern.T> Pattern = new(ctx);
 }
 
 
@@ -57,7 +58,9 @@ public static class DefaultsBuilder
 
     public static Shape.T Plane(Transformation.T transform = null, Material.T material = null) => Shape.planeOf(transform ?? Transformation.identity, material ?? Material());
 
-    public static Material.T Material(Color.T? color = null, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200) => Graphics.Material.create(ambient, diffuse, specular, shininess, color ?? Color.white);
+    public static Material.T Material(Color.T? color = null, double ambient = 0.1, double diffuse = 0.9, double specular = 0.9, double shininess = 200) => Graphics.Material.create(ambient, diffuse, specular, shininess, null, color ?? Color.white);
 
     public static Scene.Light.T PointLight(Tuple.T? position = null, Color.T? intensity = null) => Scene.Light.pointLightOf(position ?? Tuple.pointOf(-10, 10, -10), intensity ?? Color.white);
+
+    public static Intersection.Comps.T Comps(double? t = null, Shape.T shape = null, Tuple.T? point = null, Tuple.T? over = null, Tuple.T? eye = null, Tuple.T? normal = null, bool? inside = null) => Intersection.Comps.create(t ?? 0, shape ?? Sphere(), point ?? Tuple.origin, over ?? Tuple.origin, eye ?? Tuple.origin, normal ?? Tuple.origin, inside ?? false);
 }

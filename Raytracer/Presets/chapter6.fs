@@ -17,8 +17,8 @@ let render (camera: Scene.Camera.T) =
 
     let sphere =
         Color.create 1 0.2 1
-        |> Material.create 0.1 0.9 0.9 200
-        |> Geometry.Shape.sphereOf Geometry.Transformation.identity
+        |> Material.create 0.1 0.9 0.9 200 None
+        |> Geometry.Shape.sphereOf Transformation.identity
 
     let light = Scene.Light.pointLightOf (Tuple.pointOf -10 10 -10) Color.white
 
@@ -40,6 +40,7 @@ let render (camera: Scene.Camera.T) =
                 let point = Geometry.Ray.positionFrom r i.t
                 let normal = sphere.normal point
                 let eye = -r.direction
-                canvas[x, y] <- Material.lightningFrom sphere.material light point eye normal false
+                let c = Raytracer.Geometry.Intersection.Comps.create 0 sphere point point eye normal false 
+                canvas[x, y] <- Scene.Light.colorFrom light c false //  Material.lightningFrom sphere.material light point eye normal false
 
     canvas

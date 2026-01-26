@@ -18,8 +18,8 @@ let render (camera: Scene.Camera.T) =
 
     let sphere =
         color
-        |> Material.create 1 1 1 1
-        |> Geometry.Shape.sphereOf Geometry.Transformation.identity
+        |> Material.create 1 1 1 1 None
+        |> Geometry.Shape.sphereOf Transformation.identity
 
     for y in 0 .. (canvas_pixels - 1) do
         let world_y = half - pixel_size * (float y)

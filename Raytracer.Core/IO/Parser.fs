@@ -1,8 +1,9 @@
 module Raytracer.IO.Parser
 
 open System.Text.RegularExpressions
-open Raytracer.Geometry
+open Raytracer.Math
 open Raytracer.Graphics
+open Raytracer.Geometry
 
 let (|Rx|_|) pattern input =
     match Regex.Match(input, pattern) with

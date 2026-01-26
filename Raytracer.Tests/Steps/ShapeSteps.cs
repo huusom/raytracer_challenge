@@ -27,7 +27,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
 
     [Given(@"^(s) ← (test_shape\(\))$")]
     [Given(@"^(p) ← (plane\(\))$")]
-    [Given(@"^(s|s1|shape) ← (sphere\(\))$")]
+    [Given(@"^(s|s1|shape|object) ← (sphere\(\))$")]
     public void GivenShape(string shapeKey, Shape.T shape)
     {
         Shape[shapeKey] = shape;
@@ -38,7 +38,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var s = Shape[key];
         var actual = s.transform;
-        actual.ShouldBe(Geometry.Transformation.identity);
+        actual.ShouldBe(Math.Transformation.identity);
     }
 
     [Given(@"^set_transform\((s), (m)\)$")]
@@ -65,6 +65,7 @@ public class ShapeSteps(ScenarioContext ctx) : StepsBase(ctx)
     [When(@"^set_transform\((s), (scaling.*)\)$")]
     [When(@"^set_transform\((s), (translation.*)\)$")]
     [Given(@"^set_transform\((s), (translation.*)\)$")]
+    [Given(@"^set_transform\((object|shape), (scaling.*)\)$")]
     public void WhenSetTransform(string shapeKey, Transformation.T transform)
     {
         var s = Shape[shapeKey];

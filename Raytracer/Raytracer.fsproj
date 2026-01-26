@@ -9,6 +9,7 @@
     <Compile Include="Presets/chapter6.fs" />
     <Compile Include="Presets/chapter7.fs" />
     <Compile Include="Presets/chapter9.fs" />
+    <Compile Include="Presets/chapter10.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

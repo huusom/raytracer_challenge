@@ -82,8 +82,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
     {
         var w = World[worldKey];
         var comps = Comps[compsKey];
-        var c = Scene.World.lightningFrom(w, comps);
-
+        var c = Scene.World.colorFrom(w, comps);
         Color[key] = c;
     }
 
@@ -93,7 +92,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
         var w = World[worldKey];
         var r = Ray[rayKey];
 
-        var c = Scene.World.colorFrom(w, r);
+        var c = Scene.World.trace(w, r);
 
         Color[key] = c;
     }
@@ -104,7 +103,7 @@ public class WorldSteps(ScenarioContext ctx) : StepsBase(ctx)
         var w = World[worldKey];
         var p = Tuple[pointKey];
 
-        var actual = Scene.World.shadowFrom(w, p);
+        var actual = Scene.World.inShadow(w, p);
         actual.ShouldBe(expected);
     }
 

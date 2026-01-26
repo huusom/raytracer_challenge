@@ -69,3 +69,10 @@ let normalFrom shape point =
     let world_normal = M4.transpose shape.transform.inverse.Value * local_normal
 
     world_normal |> Tuple.vectorFrom |> Tuple.normalize
+
+let colorFrom shape point = 
+    match shape.material.pattern with 
+    | None -> shape.material.color 
+    | Some p -> 
+        shape.transform.inverse.Value * point 
+        |> Pattern.colorFrom p

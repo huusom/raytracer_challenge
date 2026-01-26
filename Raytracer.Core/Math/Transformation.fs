@@ -1,4 +1,4 @@
-module Raytracer.Geometry.Transformation
+module Raytracer.Math.Transformation
 
 open Raytracer.Math.Matrix
 open Raytracer.Math
